@@ -1,0 +1,87 @@
+{
+  "buyer": {
+    "name": "Pacific Retail Group",
+    "portal_title": "Pacific Retail Supplier Portal"
+  },
+  "credentials": {
+    "email": "vendor@scruffy.test",
+    "password": "scruffy123"
+  },
+  "orders": [
+    {
+      "po_number": "PO-1042",
+      "order_date": "2026-07-01",
+      "status": "Open",
+      "ship_to": "DC-West, 450 Harbor Blvd, Oakland, CA 94607",
+      "requested_delivery_date": "2026-07-08",
+      "total_amount": 480.36,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "SWT-DSK",
+          "description": "Sweet-Disk",
+          "quantity": 24,
+          "uom": "CASE",
+          "unit_price": 12.5,
+          "line_total": 300.0
+        },
+        {
+          "line_number": 2,
+          "buyer_item_code": "CRN-BAR",
+          "description": "Crunch-Bar",
+          "quantity": 12,
+          "uom": "each",
+          "unit_price": 2.99,
+          "line_total": 35.88
+        },
+        {
+          "line_number": 3,
+          "buyer_item_code": "FIZ-POP",
+          "description": "Fizz-Pop",
+          "quantity": 48,
+          "uom": "EA",
+          "unit_price": 3.01,
+          "line_total": 144.48
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1041",
+      "order_date": "2026-06-28",
+      "status": "Closed",
+      "ship_to": "Store 118, 2200 Powell St, San Francisco, CA 94133",
+      "requested_delivery_date": "2026-07-02",
+      "total_amount": 150.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "SWT-DSK",
+          "description": "Sweet-Disk",
+          "quantity": 12,
+          "uom": "CASE",
+          "unit_price": 12.5,
+          "line_total": 150.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1039",
+      "order_date": "2026-06-20",
+      "status": "Acknowledged",
+      "ship_to": "DC-West, 450 Harbor Blvd, Oakland, CA 94607",
+      "requested_delivery_date": "2026-06-27",
+      "total_amount": 89.7,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "CRN-BAR",
+          "description": "Crunch-Bar",
+          "quantity": 30,
+          "uom": "each",
+          "unit_price": 2.99,
+          "line_total": 89.7
+        }
+      ]
+    }
+  ]
+}

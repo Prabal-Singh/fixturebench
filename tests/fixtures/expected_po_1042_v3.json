@@ -1,0 +1,25 @@
+{
+  "buyer_name": "National Grocers Alliance",
+  "po_number": "PO-1042",
+  "order_date": "2026-07-01",
+  "lines": [
+    {
+      "raw_description": "Sweet-Disk",
+      "raw_sku": "SWT-DSK",
+      "quantity": 24.0,
+      "unit": "CS"
+    },
+    {
+      "raw_description": "Crunch-Bar",
+      "raw_sku": "CRN-BAR",
+      "quantity": 12.0,
+      "unit": "EA"
+    },
+    {
+      "raw_description": "Fizz-Pop",
+      "raw_sku": "FIZ-POP",
+      "quantity": 48.0,
+      "unit": "EA"
+    }
+  ]
+}

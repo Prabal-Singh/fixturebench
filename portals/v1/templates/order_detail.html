@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}{{ order.po_number }} — {{ portal_title }}{% endblock %}
+{% block body %}
+<header class="topbar">
+  <div class="brand">{{ portal_title }}</div>
+  <div class="user" data-testid="logged-in-user">{{ user_email }}</div>
+</header>
+<div class="layout">
+  <nav class="sidebar">
+    <a href="/orders" class="active" data-testid="nav-orders">Orders</a>
+    <a href="#" data-testid="nav-invoices">Invoices</a>
+    <a href="#" data-testid="nav-account">Account</a>
+  </nav>
+  <main class="content">
+    <div class="breadcrumb">
+      <a href="/orders">Orders</a> / <span data-testid="po-number">{{ order.po_number }}</span>
+    </div>
+    <h1 data-testid="po-title">{{ order.po_number }}</h1>
+    <dl class="meta-grid card">
+      <div>
+        <dt>Buyer</dt>
+        <dd data-testid="po-buyer">{{ buyer_name }}</dd>
+      </div>
+      <div>
+        <dt>Order Date</dt>
+        <dd data-testid="po-order-date">{{ order.order_date }}</dd>
+      </div>
+      <div>
+        <dt>Status</dt>
+        <dd><span class="status status-{{ order.status | lower }}" data-testid="po-status">{{ order.status }}</span></dd>
+      </div>
+      <div>
+        <dt>Ship To</dt>
+        <dd data-testid="po-ship-to">{{ order.ship_to }}</dd>
+      </div>
+      <div>
+        <dt>Need By</dt>
+        <dd data-testid="po-need-by">{{ order.requested_delivery_date }}</dd>
+      </div>
+      <div>
+        <dt>Total</dt>
+        <dd data-testid="po-total">${{ "%.2f" | format(order.total_amount) }}</dd>
+      </div>
+    </dl>
+    <h2>Order Lines</h2>
+    <div class="card">
+      <table class="data-table" data-testid="po-lines-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Item</th>
+            <th>Description</th>
+            <th>Qty</th>
+            <th>UOM</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for line in order.lines %}
+          <tr data-testid="po-line-{{ line.line_number }}">
+            <td>{{ line.line_number }}</td>
+            <td data-testid="line-item-code">{{ line.buyer_item_code }}</td>
+            <td data-testid="line-description">{{ line.description }}</td>
+            <td data-testid="line-quantity">{{ line.quantity | int if line.quantity == line.quantity | int else line.quantity }}</td>
+            <td data-testid="line-uom">{{ line.uom }}</td>
+            <td>${{ "%.2f" | format(line.unit_price) }}</td>
+            <td>${{ "%.2f" | format(line.line_total) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+{% endblock %}
