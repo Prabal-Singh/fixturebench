@@ -1,22 +1,24 @@
 # Design rationale
 
-FixtureBench portals encode real browser-agent failure modes observed in B2B procurement workflows — without requiring live Coupa/Ariba credentials.
+FixtureBench is a **generic eval harness** for browser agents: self-hosted environments, declarative cases, and programmatic scoring against golden fixtures.
+
+The buyer-portal suite under `portals/` is the first **environment pack** — a concrete structured-extraction domain that stresses real UI failure modes (pagination, messy headers, session expiry, iframes, delayed loads). It is not the product boundary.
 
 ## Philosophy: benchmarks before solvers
 
-The repo is intentionally **evaluation-first**. We define deterministic environments, golden fixtures, and programmatic scoring *before* shipping reference agents. That keeps scores honest and gives agent builders a shared target.
+The repo is intentionally **evaluation-first**. We define deterministic environments, golden fixtures, and scoring *before* shipping reference agents. That keeps scores honest and gives agent builders a shared target.
 
 ## Scoring philosophy
 
 FixtureBench scores **structured outputs** against golden fixtures — not LLM judges.
 
-An agent passes when:
+For the current pack, an agent passes when:
 
 1. It reports task success (`AgentRunResult.success`)
-2. For `extract_po` cases: extracted data matches the expected PO fixture field-for-field
-3. For `confirm_empty` cases: agent succeeds without inventing PO data
+2. For `extract_po` cases: extracted data matches the expected fixture field-for-field
+3. For `confirm_empty` cases: agent succeeds without inventing data
 
-This keeps eval deterministic and CI-friendly.
+This keeps eval deterministic and CI-friendly. Other packs can plug in their own schemas and scorers — see [extending.md](extending.md).
 
 ## Agent adapter
 
@@ -34,10 +36,8 @@ class MyAgent:
         ...
 ```
 
-The harness handles portal lifecycle, case selection, reporting, and programmatic scoring.
-
-See [catalog.md](catalog.md) for the full portal and case matrix.
+The harness handles environment lifecycle, case selection, reporting, and scoring.
 
 ## Origins
 
-Extracted from [Scruffy](https://github.com/Prabal-Singh/Scruffy) — agentic automation for B2B order ingestion — and generalized into an agent-agnostic eval library.
+Started as an internal eval layer for a browser-agent product, then generalized into an agent-agnostic library.

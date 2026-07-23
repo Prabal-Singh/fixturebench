@@ -4,47 +4,55 @@
 
 Browser agents are shipping into production, but most teams still can't answer a basic question: *did my agent get better or worse?*
 
-Live websites flake. Benchmarks use LLM judges that swing 20% on grader choice. Demos work on toy pages; production breaks on pagination, renamed columns, and ambiguous UI.
+Live websites flake. Leaderboards use LLM judges that swing 20% on grader choice. Demos work on toy pages; production breaks on pagination, renamed columns, session expiry, and ambiguous UI.
 
 FixtureBench is the missing middle layer:
 
 ```
-Fake portal (controlled)  →  Your agent  →  Structured output  →  Golden fixture diff
+Self-hosted environment  →  Your agent  →  Structured output  →  Golden fixture diff
 ```
 
-Self-hosted. Programmatic scoring. Agent-agnostic.
+Deterministic. Programmatic scoring. Agent-agnostic. CI-friendly.
 
 ---
 
-## What's included
+## What it is
 
-| Layer | What it is |
-|-------|------------|
-| **Environments** | 3 Coupa-style fake buyer portals with increasing difficulty |
-| **Cases** | Declarative eval registry (`eval/cases.json`) |
-| **Harness** | Starts portals, runs cases, writes JSON reports |
-| **Scorer** | Field-level PO comparison against golden fixtures |
+A **harness + environment packs** for evaluating any browser agent on structured web tasks:
+
+| Layer | Role |
+|-------|------|
+| **Environments** | Self-hosted fake sites with graded failure modes |
+| **Cases** | Declarative tasks (`eval/cases.json`) |
+| **Harness** | Starts envs, runs cases, writes JSON reports |
+| **Scorer** | Diffs agent output against golden fixtures |
 | **Adapter** | Thin `BrowserAgent` protocol — plug in any agent |
 
-### Portal difficulty curve
+The first shipped pack is **structured extraction** (fake buyer portals: login → navigate → extract records). That pack is an *example domain*, not the product. Bring your own sites, tasks, and fixtures for CRM, admin panels, dashboards, or anything else your agent has to operate.
 
-| Portal | Challenge |
-|--------|-----------|
+---
+
+## First environment pack: structured extraction
+
+13 self-hosted sites, 15 cases. Same failure modes agents hit on real enterprise UIs — without live credentials or flaky third-party sites.
+
+| Env | Challenge |
+|-----|-----------|
 | **v1** | Clean tables, baseline extraction |
-| **v2** | Messy column headers, inconsistent UOM labels |
-| **v3** | Paginated order list — must navigate before extracting |
-| **v4** | Line items only in CSV export |
-| **v5** | Target PO under **All Orders** tab |
+| **v2** | Messy column headers / inconsistent labels |
+| **v3** | Paginated lists — navigate before extracting |
+| **v4** | Data only in CSV export |
+| **v5** | Target record under a secondary tab |
 | **v6** | Lines hidden in collapsed accordion |
 | **v7** | Session expires mid-flow — re-login required |
-| **v8** | PO detail in modal overlay |
+| **v8** | Detail in a modal overlay |
 | **v9** | Messy DOM, no stable test ids |
-| **v10** | Search required among decoy POs |
-| **v11** | Line items inside iframe |
-| **v12** | Delayed JavaScript line load |
-| **v13** | Empty order list — graceful no-op |
+| **v10** | Search required among decoys |
+| **v11** | Content inside an iframe |
+| **v12** | Delayed JavaScript load |
+| **v13** | Empty state — graceful no-op |
 
-**15 eval cases** across 13 portals. Full matrix: [docs/catalog.md](docs/catalog.md).
+Full matrix: [docs/catalog.md](docs/catalog.md). How to add another pack: [docs/extending.md](docs/extending.md).
 
 ---
 
@@ -77,8 +85,8 @@ class YourAgent:
         return "your-agent"
 
     def run(self, task: EvalTask) -> AgentRunResult:
-        # task.portal_url, task.goal, task.po_number, task.max_steps, ...
-        return AgentRunResult(success=True, po=extracted_po, step_count=7)
+        # task.portal_url, task.goal, task.max_steps, ...
+        return AgentRunResult(success=True, po=extracted_record, step_count=7)
 ```
 
 See [`examples/stub_agent.py`](examples/stub_agent.py) for a minimal placeholder.
@@ -89,14 +97,15 @@ See [`examples/stub_agent.py`](examples/stub_agent.py) for a minimal placeholder
 
 Research benchmarks (WebArena, REAL, LexBench) optimize for leaderboard comparisons on consumer web tasks.
 
-Production teams need something different:
+Teams shipping browser agents need something different:
 
 - **Deterministic** — same input, same expected output, every CI run
-- **Workflow-shaped** — login → navigate → extract structured data
+- **Workflow-shaped** — login → navigate → extract / act on structured data
 - **Programmatic scoring** — golden fixtures, not LLM-as-judge
-- **Agent-agnostic** — compare Skyvern vs Browser Use vs your in-house loop on the same cases
+- **Agent-agnostic** — compare frameworks and in-house loops on the same cases
+- **Extensible** — environment packs are swappable; the harness stays shared
 
-FixtureBench started as the eval layer inside [Scruffy](https://github.com/Prabal-Singh/Scruffy) (B2B portal automation) and was extracted into a standalone library.
+Started as an internal eval layer for a browser-agent product, then generalized into a standalone library.
 
 ---
 
@@ -104,26 +113,30 @@ FixtureBench started as the eval layer inside [Scruffy](https://github.com/Praba
 
 ```
 fixturebench/
-├── eval/cases.json          # Eval case registry
-├── portals/v1|v2|v3/        # Self-hosted fake buyer portals
-├── tests/fixtures/          # Golden expected outputs
+├── eval/cases.json              # Case registry (current pack)
+├── portals/                     # First env pack: structured extraction
+├── tests/fixtures/              # Golden expected outputs
+├── docs/
+│   ├── catalog.md               # Pack matrix
+│   └── extending.md             # Add your own environments
 ├── src/fixturebench/
-│   ├── adapters/            # BrowserAgent protocol
-│   └── eval/                # Harness, scorer, reports
-└── scripts/run_eval.py      # CLI
+│   ├── adapters/                # BrowserAgent protocol
+│   └── eval/                    # Harness, scorer, reports
+└── scripts/run_eval.py          # CLI
 ```
 
 ---
 
 ## Status
 
-**v0.2 — benchmark catalog.** 13 portals, 15 cases, agent adapters are bring-your-own.
+**v0.2 — first environment pack.** Structured-extraction suite is complete; agent adapters are bring-your-own.
 
 Roadmap:
 
 - [ ] Reference Playwright agent adapter
-- [ ] Write-back / acknowledge cases (state mutation scoring)
-- [ ] MFA handoff + nested export menu fixtures
+- [ ] Generic result payload (less pack-specific schema on the adapter)
+- [ ] Second environment pack (non-procurement structured UI)
+- [ ] Write-back / state-mutation scoring cases
 - [ ] GitHub Action for CI eval
 
 ---

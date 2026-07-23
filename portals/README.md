@@ -1,13 +1,13 @@
-# Fake Buyer Portals
+# First environment pack — structured extraction
 
-Deterministic Coupa-style supplier portals for browser agent evaluation.
+Self-hosted fake sites for browser-agent eval. Lives under `portals/` for historical reasons; conceptually this is FixtureBench's first **environment pack**.
 
-See the full **[portal catalog](../docs/catalog.md)** for the challenge matrix and case registry.
+See the full **[pack catalog](../docs/catalog.md)** and **[how to add packs](../docs/extending.md)**.
 
 ## Quick reference
 
-| Portal | Challenge | Default port |
-|--------|-----------|--------------|
+| Env | Challenge | Default port |
+|-----|-----------|--------------|
 | v1 | Baseline | 8000 |
 | v2 | Messy headers | 8001 |
 | v3 | Pagination | 8002 |
@@ -20,16 +20,16 @@ See the full **[portal catalog](../docs/catalog.md)** for the challenge matrix a
 | v10 | Search filter | 8009 |
 | v11 | Iframe detail | 8010 |
 | v12 | Delayed JS load | 8011 |
-| v13 | Empty orders | 8012 |
+| v13 | Empty state | 8012 |
 
-## Credentials (all portals)
+## Credentials (all envs in this pack)
 
 | Field | Value |
 |-------|-------|
 | Email | `vendor@fixturebench.test` |
 | Password | `fixturebench123` |
 
-## Start a portal
+## Start an environment
 
 ```bash
 pip install -e ".[portal]"
@@ -37,12 +37,12 @@ python portals/v4/server.py
 # → http://127.0.0.1:8003
 ```
 
-Each server accepts `--port` for eval harness managed runs.
+Each server accepts `--port` for harness-managed runs.
 
-## Test data (buyer terminology ≠ supplier SKU)
+## Sample records (buyer jargon ≠ supplier SKU)
 
-| Buyer description | Buyer code | Supplier SKU (not shown on portal) |
-|-------------------|------------|-------------------------------------|
+| Description on site | Site code | Canonical SKU (not shown) |
+|---------------------|-----------|---------------------------|
 | Sweet-Disk | SWT-DSK | Choc-1 |
 | Crunch-Bar | CRN-BAR | SNK-42 |
 | Fizz-Pop | FIZ-POP | BEV-7 |
