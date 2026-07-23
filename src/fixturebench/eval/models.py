@@ -5,7 +5,22 @@ from typing import Any, List, Literal, Optional
 
 from pydantic import BaseModel, Field
 
-PortalVersion = Literal["v1", "v2", "v3"]
+PortalVersion = Literal[
+    "v1",
+    "v2",
+    "v3",
+    "v4",
+    "v5",
+    "v6",
+    "v7",
+    "v8",
+    "v9",
+    "v10",
+    "v11",
+    "v12",
+    "v13",
+]
+CaseOutcome = Literal["extract_po", "confirm_empty"]
 
 
 class EvalDefaults(BaseModel):
@@ -26,8 +41,9 @@ class EvalCase(BaseModel):
 
     id: str
     portal: PortalVersion
-    po_number: str
-    expected_fixture: str
+    po_number: str = ""
+    outcome: CaseOutcome = "extract_po"
+    expected_fixture: str = ""
     tags: List[str] = Field(default_factory=list)
     portal_url: Optional[str] = None
     manage_portal: bool = True

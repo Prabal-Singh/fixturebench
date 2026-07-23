@@ -37,13 +37,24 @@ def build_goal(case: EvalCase, defaults: EvalDefaults) -> str:
     if case.goal:
         return case.goal
 
+    if case.outcome == "confirm_empty":
+        return (
+            f"Log into the buyer portal using email {case.email or defaults.email} "
+            f"and password {case.password or defaults.password}. "
+            "Confirm there are no purchase orders to process and finish successfully "
+            "without extracting any PO data."
+        )
+
     template = defaults.goal_template
     email = case.email or defaults.email
     password = case.password or defaults.password
     return template.format(email=email, password=password, po_number=case.po_number)
 
 
-def load_expected_po(root: Path, case: EvalCase) -> RawPurchaseOrder:
+def load_expected_po(root: Path, case: EvalCase) -> RawPurchaseOrder | None:
+    if case.outcome == "confirm_empty" or not case.expected_fixture:
+        return None
+
     fixture_path = root / case.expected_fixture
     with fixture_path.open(encoding="utf-8") as handle:
         payload = json.load(handle)

@@ -1,0 +1,847 @@
+{
+  "buyer": {
+    "name": "Midwest Foods Co-op",
+    "portal_title": "Metro Supply Search Portal"
+  },
+  "credentials": {
+    "email": "vendor@fixturebench.test",
+    "password": "fixturebench123"
+  },
+  "orders": [
+    {
+      "po_number": "PO-1000",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1001",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1002",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1003",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1004",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1005",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1006",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1007",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1008",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1009",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1010",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1011",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1012",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1013",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1014",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1015",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1016",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1017",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1018",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1019",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1020",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1021",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1022",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1023",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1024",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1025",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1026",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1027",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1028",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1029",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1030",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1031",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1032",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1033",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1034",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1035",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1036",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1037",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1038",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1039",
+      "order_date": "2026-06-15",
+      "status": "Closed",
+      "ship_to": "Decoy Warehouse",
+      "requested_delivery_date": "2026-06-20",
+      "total_amount": 10.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "DEC-001",
+          "description": "Decoy Item",
+          "quantity": 1,
+          "uom": "EA",
+          "unit_price": 10.0,
+          "line_total": 10.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1042",
+      "order_date": "2026-07-01",
+      "status": "Open",
+      "ship_to": "Warehouse B, 123 Industrial Pkwy, Columbus, OH 43215",
+      "requested_delivery_date": "2026-07-08",
+      "total_amount": 480.36,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "SWT-DSK",
+          "description": "Sweet-Disk",
+          "quantity": 24,
+          "uom": "CS",
+          "unit_price": 12.5,
+          "line_total": 300.0
+        },
+        {
+          "line_number": 2,
+          "buyer_item_code": "CRN-BAR",
+          "description": "Crunch-Bar",
+          "quantity": 12,
+          "uom": "EA",
+          "unit_price": 2.99,
+          "line_total": 35.88
+        },
+        {
+          "line_number": 3,
+          "buyer_item_code": "FIZ-POP",
+          "description": "Fizz-Pop",
+          "quantity": 48,
+          "uom": "EA",
+          "unit_price": 3.01,
+          "line_total": 144.48
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1041",
+      "order_date": "2026-06-28",
+      "status": "Closed",
+      "ship_to": "Store #12, 88 Market St, Dayton, OH 45402",
+      "requested_delivery_date": "2026-07-02",
+      "total_amount": 150.0,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "SWT-DSK",
+          "description": "Sweet-Disk",
+          "quantity": 12,
+          "uom": "CS",
+          "unit_price": 12.5,
+          "line_total": 150.0
+        }
+      ]
+    },
+    {
+      "po_number": "PO-1039",
+      "order_date": "2026-06-20",
+      "status": "Acknowledged",
+      "ship_to": "Warehouse B, 123 Industrial Pkwy, Columbus, OH 43215",
+      "requested_delivery_date": "2026-06-27",
+      "total_amount": 89.7,
+      "lines": [
+        {
+          "line_number": 1,
+          "buyer_item_code": "CRN-BAR",
+          "description": "Crunch-Bar",
+          "quantity": 30,
+          "uom": "EA",
+          "unit_price": 2.99,
+          "line_total": 89.7
+        }
+      ]
+    }
+  ]
+}

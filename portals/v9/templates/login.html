@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Sign in — {{ portal_title }}{% endblock %}
+{% block body %}
+<div class="login-page">
+  <div class="login-card">
+    <h1>{{ portal_title }}</h1>
+    <form method="post" action="/login">
+      <div class="form-group"><label>Email</label><input name="email" type="email" required></div>
+      <div class="form-group"><label>Password</label><input name="password" type="password" required></div>
+      <button type="submit" class="btn">Continue</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

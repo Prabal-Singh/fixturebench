@@ -1,0 +1,11 @@
+{
+  "buyer": {
+    "name": "Midwest Foods Co-op",
+    "portal_title": "Quiet Foods Vendor Portal"
+  },
+  "credentials": {
+    "email": "vendor@fixturebench.test",
+    "password": "fixturebench123"
+  },
+  "orders": []
+}

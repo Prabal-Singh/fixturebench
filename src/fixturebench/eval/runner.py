@@ -122,12 +122,17 @@ class EvalRunner:
         comparison = None
         extraction_pass = False
 
-        if agent_result.po is not None:
+        if case.outcome == "confirm_empty":
+            extraction_pass = agent_result.po is None
+            passed = agent_result.success and extraction_pass
+        elif agent_result.po is not None and expected is not None:
             comparison = compare_po(agent_result.po, expected)
             extraction_pass = comparison.passed
+            passed = agent_result.success and extraction_pass
+        else:
+            passed = False
 
         metrics = _case_metrics(agent_result)
-        passed = agent_result.success and extraction_pass
 
         return EvalCaseResult(
             case_id=case.id,

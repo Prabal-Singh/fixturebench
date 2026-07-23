@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Purchase Orders — {{ portal_title }}{% endblock %}
+{% block body %}
+<header class="topbar"><div class="brand">{{ portal_title }}</div><div class="user" data-testid="logged-in-user">{{ user_email }}</div></header>
+<main class="content">
+  <h1>Purchase Orders</h1>
+  <form class="search-bar" method="get" action="/orders" data-testid="search-form">
+    <input name="q" value="{{ query }}" placeholder="Search PO number..." data-testid="search-input">
+    <button type="submit" class="btn" data-testid="search-submit">Search</button>
+  </form>
+  {% if not query %}
+  <p class="muted" data-testid="search-hint">Showing first 8 results only. Search to find older POs.</p>
+  {% endif %}
+  <div class="card">
+    <table class="data-table" data-testid="orders-table">
+      <thead><tr><th>PO Number</th><th>Status</th><th>Total</th></tr></thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td><a href="/orders/{{ order.po_number }}" data-testid="po-link-{{ order.po_number }}">{{ order.po_number }}</a></td>
+          <td>{{ order.status }}</td>
+          <td>${{ "%.2f" | format(order.total_amount) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
+{% endblock %}

@@ -4,8 +4,8 @@
     "portal_title": "Pacific Retail Supplier Portal"
   },
   "credentials": {
-    "email": "vendor@scruffy.test",
-    "password": "scruffy123"
+    "email": "vendor@fixturebench.test",
+    "password": "fixturebench123"
   },
   "orders": [
     {

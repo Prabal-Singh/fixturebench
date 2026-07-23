@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "defaults": {
     "max_steps": 12,
     "headless": true,
@@ -13,14 +13,21 @@
       "portal": "v1",
       "po_number": "PO-1042",
       "expected_fixture": "tests/fixtures/expected_po_1042.json",
-      "tags": ["smoke", "portal", "baseline"]
+      "tags": ["smoke", "baseline", "login", "detail-page"]
+    },
+    {
+      "id": "v1_po_1041",
+      "portal": "v1",
+      "po_number": "PO-1041",
+      "expected_fixture": "tests/fixtures/expected_po_1041.json",
+      "tags": ["baseline", "detail-page", "single-line"]
     },
     {
       "id": "v2_po_1042",
       "portal": "v2",
       "po_number": "PO-1042",
       "expected_fixture": "tests/fixtures/expected_po_1042_v2.json",
-      "tags": ["smoke", "portal", "messy-headers"]
+      "tags": ["smoke", "messy-headers", "semantic-mapping"]
     },
     {
       "id": "v3_po_1042",
@@ -28,7 +35,100 @@
       "po_number": "PO-1042",
       "expected_fixture": "tests/fixtures/expected_po_1042_v3.json",
       "max_steps": 18,
-      "tags": ["smoke", "portal", "pagination"]
+      "tags": ["smoke", "pagination", "navigation"]
+    },
+    {
+      "id": "v3_po_1039",
+      "portal": "v3",
+      "po_number": "PO-1039",
+      "expected_fixture": "tests/fixtures/expected_po_1039.json",
+      "max_steps": 20,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. Open purchase order PO-1039 (it is on page 3 of the paginated orders list) and finish when the PO line items are visible.",
+      "tags": ["pagination", "navigation", "single-line", "page-3"]
+    },
+    {
+      "id": "v4_po_1042_csv",
+      "portal": "v4",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "max_steps": 16,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. Open purchase order PO-1042. Line items are not shown on the page — download the CSV export, parse the line items, and finish when extraction is complete.",
+      "tags": ["csv-export", "download", "hidden-data"]
+    },
+    {
+      "id": "v5_po_1042_tabs",
+      "portal": "v5",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "max_steps": 16,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. PO-1042 is not visible under Open Orders — switch to the All Orders tab, open PO-1042, and finish when line items are visible.",
+      "tags": ["tab-navigation", "empty-state", "navigation"]
+    },
+    {
+      "id": "v6_po_1042_accordion",
+      "portal": "v6",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. Open PO-1042, expand the collapsed line-items section, and finish when all lines are visible.",
+      "tags": ["accordion", "hidden-ui", "interaction"]
+    },
+    {
+      "id": "v7_po_1042_session",
+      "portal": "v7",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "max_steps": 24,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. Open PO-1042 and finish when line items are visible. If your session expires, sign in again and continue.",
+      "tags": ["session-expiry", "recovery", "auth"]
+    },
+    {
+      "id": "v8_po_1042_modal",
+      "portal": "v8",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. Open PO-1042 from the orders list modal overlay and finish when line items are visible in the modal.",
+      "tags": ["modal", "overlay", "interaction"]
+    },
+    {
+      "id": "v9_po_1042_messy_dom",
+      "portal": "v9",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "max_steps": 18,
+      "tags": ["messy-dom", "no-testids", "perception"]
+    },
+    {
+      "id": "v10_po_1042_search",
+      "portal": "v10",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "max_steps": 18,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. Search for PO-1042, open it, and finish when line items are visible.",
+      "tags": ["search", "filter", "navigation"]
+    },
+    {
+      "id": "v11_po_1042_iframe",
+      "portal": "v11",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "max_steps": 16,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. Open PO-1042. The line items render inside an embedded iframe — extract from the frame and finish.",
+      "tags": ["iframe", "embedded-content", "navigation"]
+    },
+    {
+      "id": "v12_po_1042_delayed",
+      "portal": "v12",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "max_steps": 20,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. Open PO-1042 and wait for delayed line items to load before finishing extraction.",
+      "tags": ["delayed-load", "javascript", "timing"]
+    },
+    {
+      "id": "v13_empty_orders",
+      "portal": "v13",
+      "outcome": "confirm_empty",
+      "tags": ["empty-state", "graceful-noop", "smoke"]
     }
   ]
 }

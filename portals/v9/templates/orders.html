@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Purchase Orders — {{ portal_title }}{% endblock %}
+{% block body %}
+<div class="topbar"><span>{{ portal_title }}</span><span>{{ user_email }}</span></div>
+<div class="content">
+  <div class="x_title">Purchase Orders</div>
+  {% for order in orders %}
+  <div class="rowblock">
+    <span class="lbl">PO</span>
+    <a class="lnk" href="/orders/{{ order.po_number }}">{{ order.po_number }}</a>
+    <span class="lbl">Status</span><span>{{ order.status }}</span>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

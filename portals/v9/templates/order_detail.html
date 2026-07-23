@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}{{ order.po_number }}{% endblock %}
+{% block body %}
+<div class="topbar"><span>{{ portal_title }}</span><span>{{ user_email }}</span></div>
+<div class="content">
+  <div class="x_title">{{ order.po_number }}</div>
+  <div class="rowblock"><span class="lbl">Buyer</span><span>{{ buyer_name }}</span></div>
+  <div class="rowblock"><span class="lbl">Date</span><span>{{ order.order_date }}</span></div>
+  <div class="section">Lines</div>
+  <div class="grid-head grid-row"><span>SKU</span><span>Name</span><span>Qty</span><span>Unit</span></div>
+  {% for line in order.lines %}
+  <div class="grid-row line-row">
+    <span>{{ line.buyer_item_code }}</span>
+    <span>{{ line.description }}</span>
+    <span>{{ line.quantity | int if line.quantity == line.quantity | int else line.quantity }}</span>
+    <span>{{ line.uom }}</span>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Purchase Orders — {{ portal_title }}{% endblock %}
+{% block body %}
+<header class="topbar">
+  <div class="brand">{{ portal_title }}</div>
+  <div class="user" data-testid="logged-in-user">{{ user_email }}</div>
+</header>
+<main class="content">
+  <h1>Purchase Orders</h1>
+  <div class="card">
+    <table class="data-table" data-testid="orders-table">
+      <thead>
+        <tr><th>PO Number</th><th>Status</th><th>Total</th></tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td><a href="/orders?modal={{ order.po_number }}" data-testid="po-link-{{ order.po_number }}">{{ order.po_number }}</a></td>
+          <td>{{ order.status }}</td>
+          <td>${{ "%.2f" | format(order.total_amount) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</main>
+{% if modal_order %}
+<div class="modal-backdrop" data-testid="po-modal-backdrop">
+  <div class="modal" data-testid="po-modal">
+    <h2 data-testid="po-title">{{ modal_order.po_number }}</h2>
+    <p>Buyer: <span data-testid="po-buyer">{{ buyer_name }}</span></p>
+    <table class="data-table" data-testid="po-lines-table">
+      <thead><tr><th>Item</th><th>Description</th><th>Qty</th><th>UOM</th></tr></thead>
+      <tbody>
+        {% for line in modal_order.lines %}
+        <tr data-testid="po-line-{{ line.line_number }}">
+          <td data-testid="line-item-code">{{ line.buyer_item_code }}</td>
+          <td data-testid="line-description">{{ line.description }}</td>
+          <td data-testid="line-quantity">{{ line.quantity | int if line.quantity == line.quantity | int else line.quantity }}</td>
+          <td data-testid="line-uom">{{ line.uom }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a class="btn btn-inline" href="/orders" data-testid="close-modal">Close</a>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

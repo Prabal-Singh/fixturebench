@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ order.po_number }} — {{ portal_title }}{% endblock %}
+{% block body %}
+<header class="topbar"><div class="brand">{{ portal_title }}</div><div class="user" data-testid="logged-in-user">{{ user_email }}</div></header>
+<main class="content">
+  <h1 data-testid="po-title">{{ order.po_number }}</h1>
+  <p>Buyer: <span data-testid="po-buyer">{{ buyer_name }}</span></p>
+  <p class="loading" data-testid="lines-loading">Loading line items...</p>
+  <table class="data-table" data-testid="po-lines-table" hidden>
+    <thead><tr><th>Item</th><th>Description</th><th>Qty</th><th>UOM</th></tr></thead>
+    <tbody id="lines-body"></tbody>
+  </table>
+</main>
+<script>
+  setTimeout(async () => {
+    const response = await fetch('/api/orders/{{ order.po_number }}/lines');
+    const payload = await response.json();
+    const tbody = document.getElementById('lines-body');
+    payload.lines.forEach((line, index) => {
+      const row = document.createElement('tr');
+      row.setAttribute('data-testid', `po-line-${line.line_number}`);
+      row.innerHTML = `
+        <td data-testid="line-item-code">${line.buyer_item_code}</td>
+        <td data-testid="line-description">${line.description}</td>
+        <td data-testid="line-quantity">${line.quantity}</td>
+        <td data-testid="line-uom">${line.uom}</td>`;
+      tbody.appendChild(row);
+    });
+    document.querySelector('[data-testid="lines-loading"]').hidden = true;
+    document.querySelector('[data-testid="po-lines-table"]').hidden = false;
+  }, 1500);
+</script>
+{% endblock %}

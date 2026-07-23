@@ -2,13 +2,9 @@
 
 FixtureBench portals encode real browser-agent failure modes observed in B2B procurement workflows — without requiring live Coupa/Ariba credentials.
 
-## Why three variants?
+## Philosophy: benchmarks before solvers
 
-| Portal | What it tests | Real-world analog |
-|--------|---------------|-------------------|
-| **v1** | Clean tables, stable selectors | Happy-path portal scrape |
-| **v2** | Messy headers, inconsistent UOM labels | Buyer terminology drift |
-| **v3** | Paginated order lists | Navigation before extraction |
+The repo is intentionally **evaluation-first**. We define deterministic environments, golden fixtures, and programmatic scoring *before* shipping reference agents. That keeps scores honest and gives agent builders a shared target.
 
 ## Scoring philosophy
 
@@ -17,7 +13,8 @@ FixtureBench scores **structured outputs** against golden fixtures — not LLM j
 An agent passes when:
 
 1. It reports task success (`AgentRunResult.success`)
-2. Extracted data matches the expected PO fixture field-for-field
+2. For `extract_po` cases: extracted data matches the expected PO fixture field-for-field
+3. For `confirm_empty` cases: agent succeeds without inventing PO data
 
 This keeps eval deterministic and CI-friendly.
 
@@ -38,6 +35,8 @@ class MyAgent:
 ```
 
 The harness handles portal lifecycle, case selection, reporting, and programmatic scoring.
+
+See [catalog.md](catalog.md) for the full portal and case matrix.
 
 ## Origins
 

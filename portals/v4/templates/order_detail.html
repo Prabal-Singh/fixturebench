@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}{{ order.po_number }} — {{ portal_title }}{% endblock %}
+{% block body %}
+<header class="topbar">
+  <div class="brand">{{ portal_title }}</div>
+  <div class="user" data-testid="logged-in-user">{{ user_email }}</div>
+</header>
+<div class="layout">
+  <nav class="sidebar">
+    <a href="/orders" class="active" data-testid="nav-orders">Orders</a>
+  </nav>
+  <main class="content">
+    <div class="breadcrumb">
+      <a href="/orders">Orders</a> / <span data-testid="po-number">{{ order.po_number }}</span>
+    </div>
+    <h1 data-testid="po-title">{{ order.po_number }}</h1>
+    <dl class="meta-grid card">
+      <div>
+        <dt>Buyer</dt>
+        <dd data-testid="po-buyer">{{ buyer_name }}</dd>
+      </div>
+      <div>
+        <dt>Order Date</dt>
+        <dd data-testid="po-order-date">{{ order.order_date }}</dd>
+      </div>
+      <div>
+        <dt>Status</dt>
+        <dd data-testid="po-status">{{ order.status }}</dd>
+      </div>
+    </dl>
+    <div class="card export-panel">
+      <h2>Line Items</h2>
+      <p class="muted" data-testid="export-notice">
+        Line-level detail is not rendered in the browser. Download the PO export to view items.
+      </p>
+      <a class="btn btn-inline" href="/orders/{{ order.po_number }}/export.csv" data-testid="download-csv">
+        Download CSV Export
+      </a>
+    </div>
+  </main>
+</div>
+{% endblock %}

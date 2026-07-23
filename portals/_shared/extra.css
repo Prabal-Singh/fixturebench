@@ -1,0 +1,82 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  width: min(720px, 92vw);
+  max-height: 85vh;
+  overflow: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.btn-inline {
+  width: auto;
+  margin-top: 1rem;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.export-panel .muted {
+  margin-bottom: 1rem;
+}
+
+.accordion summary {
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+iframe.po-frame {
+  width: 100%;
+  min-height: 420px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.loading {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.grid-row {
+  display: grid;
+  grid-template-columns: 1.2fr 2fr 0.7fr 0.7fr;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.grid-head {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.search-bar {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.search-bar button {
+  width: auto;
+}

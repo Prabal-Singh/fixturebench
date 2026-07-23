@@ -33,6 +33,18 @@ Self-hosted. Programmatic scoring. Agent-agnostic.
 | **v1** | Clean tables, baseline extraction |
 | **v2** | Messy column headers, inconsistent UOM labels |
 | **v3** | Paginated order list — must navigate before extracting |
+| **v4** | Line items only in CSV export |
+| **v5** | Target PO under **All Orders** tab |
+| **v6** | Lines hidden in collapsed accordion |
+| **v7** | Session expires mid-flow — re-login required |
+| **v8** | PO detail in modal overlay |
+| **v9** | Messy DOM, no stable test ids |
+| **v10** | Search required among decoy POs |
+| **v11** | Line items inside iframe |
+| **v12** | Delayed JavaScript line load |
+| **v13** | Empty order list — graceful no-op |
+
+**15 eval cases** across 13 portals. Full matrix: [docs/catalog.md](docs/catalog.md).
 
 ---
 
@@ -105,13 +117,13 @@ fixturebench/
 
 ## Status
 
-**v0.1 — alpha.** Environments and harness are stable; agent adapters are bring-your-own.
+**v0.2 — benchmark catalog.** 13 portals, 15 cases, agent adapters are bring-your-own.
 
 Roadmap:
 
 - [ ] Reference Playwright agent adapter
 - [ ] Write-back / acknowledge cases (state mutation scoring)
-- [ ] Session expiry and empty-state fixtures
+- [ ] MFA handoff + nested export menu fixtures
 - [ ] GitHub Action for CI eval
 
 ---

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Purchase Orders — {{ portal_title }}{% endblock %}
+{% block body %}
+<header class="topbar">
+  <div class="brand">{{ portal_title }}</div>
+  <div class="user" data-testid="logged-in-user">{{ user_email }}</div>
+</header>
+<div class="layout">
+  <nav class="sidebar">
+    <a href="/orders?tab=open" class="{% if active_tab == 'open' %}active{% endif %}" data-testid="tab-open">Open Orders</a>
+    <a href="/orders?tab=all" class="{% if active_tab == 'all' %}active{% endif %}" data-testid="tab-all">All Orders</a>
+  </nav>
+  <main class="content">
+    <h1>Purchase Orders</h1>
+    {% if active_tab == 'open' %}
+    <p class="muted" data-testid="tab-hint">Showing open orders only. Some POs may live under All Orders.</p>
+    {% endif %}
+    <div class="card">
+      {% if orders %}
+      <table class="data-table" data-testid="orders-table">
+        <thead>
+          <tr>
+            <th>PO Number</th>
+            <th>Order Date</th>
+            <th>Status</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td><a href="/orders/{{ order.po_number }}" data-testid="po-link-{{ order.po_number }}">{{ order.po_number }}</a></td>
+            <td>{{ order.order_date }}</td>
+            <td>{{ order.status }}</td>
+            <td>${{ "%.2f" | format(order.total_amount) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p data-testid="empty-state">No purchase orders in this view.</p>
+      {% endif %}
+    </div>
+  </main>
+</div>
+{% endblock %}

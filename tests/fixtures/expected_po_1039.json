@@ -1,0 +1,13 @@
+{
+  "buyer_name": "National Grocers Alliance",
+  "po_number": "PO-1039",
+  "order_date": "2026-06-20",
+  "lines": [
+    {
+      "raw_description": "Crunch-Bar",
+      "raw_sku": "CRN-BAR",
+      "quantity": 30.0,
+      "unit": "EA"
+    }
+  ]
+}

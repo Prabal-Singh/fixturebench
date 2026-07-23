@@ -1,0 +1,13 @@
+{
+  "buyer_name": "Midwest Foods Co-op",
+  "po_number": "PO-1041",
+  "order_date": "2026-06-28",
+  "lines": [
+    {
+      "raw_description": "Sweet-Disk",
+      "raw_sku": "SWT-DSK",
+      "quantity": 12.0,
+      "unit": "CS"
+    }
+  ]
+}

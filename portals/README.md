@@ -2,51 +2,47 @@
 
 Deterministic Coupa-style supplier portals for browser agent evaluation.
 
-These environments are self-hosted, reproducible, and designed to stress common failure modes without hitting live websites.
+See the full **[portal catalog](../docs/catalog.md)** for the challenge matrix and case registry.
 
-## Credentials
+## Quick reference
+
+| Portal | Challenge | Default port |
+|--------|-----------|--------------|
+| v1 | Baseline | 8000 |
+| v2 | Messy headers | 8001 |
+| v3 | Pagination | 8002 |
+| v4 | CSV export | 8003 |
+| v5 | Tab navigation | 8004 |
+| v6 | Accordion lines | 8005 |
+| v7 | Session expiry | 8006 |
+| v8 | Modal detail | 8007 |
+| v9 | Messy DOM | 8008 |
+| v10 | Search filter | 8009 |
+| v11 | Iframe detail | 8010 |
+| v12 | Delayed JS load | 8011 |
+| v13 | Empty orders | 8012 |
+
+## Credentials (all portals)
 
 | Field | Value |
 |-------|-------|
 | Email | `vendor@fixturebench.test` |
 | Password | `fixturebench123` |
 
-## v1 — Midwest Foods Vendor Portal
-
-Clean Coupa-style layout. Baseline extraction case.
+## Start a portal
 
 ```bash
 pip install -e ".[portal]"
-python portals/v1/server.py
-# → http://127.0.0.1:8000
+python portals/v4/server.py
+# → http://127.0.0.1:8003
 ```
 
-## v2 — Pacific Retail Supplier Portal
+Each server accepts `--port` for eval harness managed runs.
 
-Same layout and `data-testid`s as v1, but **messy column headers** and **inconsistent UOM labels** (`CASE`, `each`, `EA`).
-
-```bash
-python portals/v2/server.py
-# → http://127.0.0.1:8001
-```
-
-## v3 — National Grocers Alliance (NGA)
-
-Clean headers like v1, but the **orders list is paginated** (2 POs per page). PO-1042 is on page 2.
-
-```bash
-python portals/v3/server.py
-# → http://127.0.0.1:8002
-```
-
-Pagination controls use `data-testid="orders-next"`, `orders-prev`, and `orders-page-info`.
-
-## Test data
+## Test data (buyer terminology ≠ supplier SKU)
 
 | Buyer description | Buyer code | Supplier SKU (not shown on portal) |
 |-------------------|------------|-------------------------------------|
 | Sweet-Disk | SWT-DSK | Choc-1 |
 | Crunch-Bar | CRN-BAR | SNK-42 |
 | Fizz-Pop | FIZ-POP | BEV-7 |
-
-See [docs/design-rationale.md](docs/design-rationale.md) for why these variants exist.

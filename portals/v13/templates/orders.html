@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Purchase Orders — {{ portal_title }}{% endblock %}
+{% block body %}
+<header class="topbar"><div class="brand">{{ portal_title }}</div><div class="user" data-testid="logged-in-user">{{ user_email }}</div></header>
+<main class="content">
+  <h1>Purchase Orders</h1>
+  <div class="card">
+    <p data-testid="empty-state">No purchase orders are available right now.</p>
+  </div>
+</main>
+{% endblock %}

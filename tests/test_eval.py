@@ -13,9 +13,14 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_load_eval_suite() -> None:
     suite = load_suite(ROOT / "eval" / "cases.json")
-    assert suite.version == 1
-    assert len(suite.cases) >= 3
-    assert {case.id for case in suite.cases} >= {"v1_po_1042", "v2_po_1042", "v3_po_1042"}
+    assert suite.version == 2
+    assert len(suite.cases) >= 15
+    assert {case.id for case in suite.cases} >= {
+        "v1_po_1042",
+        "v2_po_1042",
+        "v3_po_1042",
+        "v13_empty_orders",
+    }
 
 
 def test_resolve_cases_by_tag() -> None:

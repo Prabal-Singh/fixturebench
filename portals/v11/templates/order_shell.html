@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ order.po_number }} — {{ portal_title }}{% endblock %}
+{% block body %}
+<header class="topbar"><div class="brand">{{ portal_title }}</div><div class="user">{{ user_email }}</div></header>
+<main class="content">
+  <h1 data-testid="po-title">{{ order.po_number }}</h1>
+  <p class="muted" data-testid="iframe-notice">Order detail is rendered inside an embedded frame.</p>
+  <iframe class="po-frame" src="/orders/{{ order.po_number }}/frame" title="PO detail" data-testid="po-detail-frame"></iframe>
+</main>
+{% endblock %}

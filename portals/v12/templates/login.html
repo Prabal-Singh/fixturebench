@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Sign in — {{ portal_title }}{% endblock %}
+{% block body %}
+<div class="login-page">
+  <div class="login-card">
+    <h1>{{ portal_title }}</h1>
+    <p class="subtitle">Supplier sign in</p>
+    {% if error %}
+    <div class="error" data-testid="login-error">{{ error }}</div>
+    {% endif %}
+    <form method="post" action="/login" data-testid="login-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="username" data-testid="login-email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" data-testid="login-password" required>
+      </div>
+      <button type="submit" class="btn" data-testid="login-submit">Sign in</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

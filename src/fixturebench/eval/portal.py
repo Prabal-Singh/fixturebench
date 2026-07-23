@@ -13,9 +13,75 @@ from typing import Optional
 from fixturebench.eval.models import PortalVersion
 
 PORTAL_SPECS: dict[PortalVersion, dict[str, object]] = {
-    "v1": {"server": "portals/v1/server.py", "default_port": 8000},
-    "v2": {"server": "portals/v2/server.py", "default_port": 8001},
-    "v3": {"server": "portals/v3/server.py", "default_port": 8002},
+    "v1": {
+        "server": "portals/v1/server.py",
+        "default_port": 8000,
+        "challenge": "baseline",
+    },
+    "v2": {
+        "server": "portals/v2/server.py",
+        "default_port": 8001,
+        "challenge": "messy-headers",
+    },
+    "v3": {
+        "server": "portals/v3/server.py",
+        "default_port": 8002,
+        "challenge": "pagination",
+    },
+    "v4": {
+        "server": "portals/v4/server.py",
+        "default_port": 8003,
+        "challenge": "csv-export",
+    },
+    "v5": {
+        "server": "portals/v5/server.py",
+        "default_port": 8004,
+        "challenge": "tab-navigation",
+    },
+    "v6": {
+        "server": "portals/v6/server.py",
+        "default_port": 8005,
+        "challenge": "accordion-lines",
+    },
+    "v7": {
+        "server": "portals/v7/server.py",
+        "default_port": 8006,
+        "challenge": "session-expiry",
+    },
+    "v8": {
+        "server": "portals/v8/server.py",
+        "default_port": 8007,
+        "challenge": "modal-detail",
+    },
+    "v9": {
+        "server": "portals/v9/server.py",
+        "default_port": 8008,
+        "challenge": "messy-dom",
+    },
+    "v10": {
+        "server": "portals/v10/server.py",
+        "default_port": 8009,
+        "challenge": "search-filter",
+    },
+    "v11": {
+        "server": "portals/v11/server.py",
+        "default_port": 8010,
+        "challenge": "iframe-detail",
+    },
+    "v12": {
+        "server": "portals/v12/server.py",
+        "default_port": 8011,
+        "challenge": "delayed-load",
+    },
+    "v13": {
+        "server": "portals/v13/server.py",
+        "default_port": 8012,
+        "challenge": "empty-orders",
+    },
+}
+
+PORTAL_CHALLENGES: dict[PortalVersion, str] = {
+    version: str(spec["challenge"]) for version, spec in PORTAL_SPECS.items()
 }
 
 
