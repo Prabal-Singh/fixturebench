@@ -1,3 +1,16 @@
-"""FixtureBench — deterministic eval for browser agents."""
+"""FixtureBench — plug-and-play eval for browser agents."""
 
-__version__ = "0.2.0"
+from fixturebench.api import run
+from fixturebench.adapters import AgentRunResult, BrowserAgent, EvalTask
+from fixturebench.eval import EvalRunner
+
+__version__ = "0.3.0"
+
+__all__ = [
+    "AgentRunResult",
+    "BrowserAgent",
+    "EvalRunner",
+    "EvalTask",
+    "run",
+    "__version__",
+]

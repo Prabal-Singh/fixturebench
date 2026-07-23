@@ -31,20 +31,22 @@ class EvalRunner:
 
     def __init__(
         self,
-        root: Path,
         agent: BrowserAgent,
         *,
+        root: Optional[Path] = None,
         suite_path: Optional[Path] = None,
         output_dir: Optional[Path] = None,
         screenshot_dir: Optional[Path] = None,
         trace_dir: Optional[Path] = None,
     ) -> None:
-        self.root = root
+        from fixturebench.paths import default_root
+
+        self.root = Path(root) if root is not None else default_root()
         self.agent = agent
-        self.suite_path = suite_path or (root / "eval" / "cases.json")
-        self.output_dir = output_dir or (root / "eval-results")
-        self.screenshot_dir = screenshot_dir or (root / "eval-results" / "screenshots")
-        self.trace_dir = trace_dir or (root / "eval-results" / "traces")
+        self.suite_path = suite_path or (self.root / "eval" / "cases.json")
+        self.output_dir = output_dir or (Path.cwd() / "eval-results")
+        self.screenshot_dir = screenshot_dir or (self.output_dir / "screenshots")
+        self.trace_dir = trace_dir or (self.output_dir / "traces")
 
     def load_suite(self) -> EvalSuite:
         return load_suite(self.suite_path)
