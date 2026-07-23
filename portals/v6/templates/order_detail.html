@@ -6,32 +6,45 @@
   <div class="user" data-testid="logged-in-user">{{ user_email }}</div>
 </header>
 <div class="layout">
+  <nav class="sidebar">
+    <a href="/orders" class="active" data-testid="nav-orders">Orders</a>
+  </nav>
   <main class="content">
+    <div class="breadcrumb">
+      <a href="/orders">Orders</a> / <span data-testid="po-number">{{ order.po_number }}</span>
+    </div>
     <h1 data-testid="po-title">{{ order.po_number }}</h1>
     <p class="muted">Buyer: <span data-testid="po-buyer">{{ buyer_name }}</span> · Date: {{ order.order_date }}</p>
-    <details class="card accordion" data-testid="line-items-accordion">
-      <summary data-testid="expand-line-items">Show line items ({{ order.lines | length }})</summary>
-      <table class="data-table" data-testid="po-lines-table">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>Description</th>
-            <th>Qty</th>
-            <th>UOM</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for line in order.lines %}
-          <tr data-testid="po-line-{{ line.line_number }}">
-            <td data-testid="line-item-code">{{ line.buyer_item_code }}</td>
-            <td data-testid="line-description">{{ line.description }}</td>
-            <td data-testid="line-quantity">{{ line.quantity | int if line.quantity == line.quantity | int else line.quantity }}</td>
-            <td data-testid="line-uom">{{ line.uom }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </details>
+
+    <div class="card">
+      <h2>Order Lines</h2>
+      <p class="muted" data-testid="accordion-hint">Line items are hidden. Expand the section below to view them.</p>
+      <details class="accordion" data-testid="line-items-accordion">
+        <summary data-testid="expand-line-items">
+          <span class="accordion-label">Show line items ({{ order.lines | length }})</span>
+        </summary>
+        <table class="data-table" data-testid="po-lines-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Description</th>
+              <th>Qty</th>
+              <th>UOM</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for line in order.lines %}
+            <tr data-testid="po-line-{{ line.line_number }}">
+              <td data-testid="line-item-code">{{ line.buyer_item_code }}</td>
+              <td data-testid="line-description">{{ line.description }}</td>
+              <td data-testid="line-quantity">{{ line.quantity | int if line.quantity == line.quantity | int else line.quantity }}</td>
+              <td data-testid="line-uom">{{ line.uom }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </details>
+    </div>
   </main>
 </div>
 {% endblock %}

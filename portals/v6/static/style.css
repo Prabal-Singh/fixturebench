@@ -329,3 +329,46 @@ iframe.po-frame {
 .search-bar button {
   width: auto;
 }
+
+/* v6 accordion — make disclosure obvious */
+.accordion {
+  margin-top: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #f8faf9;
+}
+
+.accordion summary {
+  list-style: none;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+}
+
+.accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion summary::before {
+  content: "▶";
+  font-size: 0.75rem;
+  color: var(--green);
+}
+
+.accordion[open] summary::before {
+  content: "▼";
+}
+
+.accordion summary:hover {
+  background: #eef3f0;
+}
+
+.accordion .data-table {
+  background: white;
+  margin: 0;
+  border-top: 1px solid var(--border);
+}
