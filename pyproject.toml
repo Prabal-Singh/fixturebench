@@ -34,6 +34,9 @@ portal = [
 dev = [
     "pytest>=8.0.0",
 ]
+playwright = [
+    "playwright>=1.49.0",
+]
 
 [project.scripts]
 fixturebench = "fixturebench.cli:main"
