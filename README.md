@@ -193,7 +193,7 @@ Also shipped: [`examples/playwright_smoke_agent.py`](examples/playwright_smoke_a
 
 ## Portal catalog
 
-23 cases across 21 self-hosted buyer portals:
+25 cases across 23 self-hosted buyer portals:
 
 | Env | Challenge |
 |-----|-----------|
@@ -218,8 +218,10 @@ Also shipped: [`examples/playwright_smoke_agent.py`](examples/playwright_smoke_a
 | **v19** | Acknowledge before reveal |
 | **v20** | MFA / OTP handoff |
 | **v21** | Virtualized order grid (scroll to mount) |
+| **v22** | Multi-buyer PO ambiguity |
+| **v23** | Stale cached detail until refresh |
 
-Hard band (`--tags hard`): v14–v21.
+Hard band (`--tags hard`): v14–v23.
 
 Full matrix: [docs/catalog.md](docs/catalog.md). Add a portal variant: [docs/extending.md](docs/extending.md).
 
@@ -245,7 +247,7 @@ Started as an internal eval layer for a procurement browser-agent product.
 ```
 fixturebench/
 ├── eval/cases.json          # PO extraction / empty-state cases
-├── portals/                 # Fake buyer portals (v1–v21)
+├── portals/                 # Fake buyer portals (v1–v23)
 ├── examples/
 │   ├── playwright_smoke_agent.py
 │   └── playwright_agentic_agent.py
@@ -261,14 +263,16 @@ fixturebench/
 
 ## Status
 
-**v0.6** — virtualized order grid (v21), write-back scoring, 21 portals, CI smoke.
+**v0.7** — portal catalog complete (v1–v23), write-back scoring, CI smoke.
 
 Roadmap (stays in procurement):
 
 - [x] Write-back scoring (acknowledge → assert server state)
 - [x] Virtualized order grid
-- [ ] Stale cache / multi-buyer PO ambiguity
+- [x] Stale cache / multi-buyer PO ambiguity
 - [x] GitHub Action for CI eval
+- [ ] More write-backs (qty change / ASN)
+- [ ] Scruffy CI dogfood + published scores
 
 ---
 

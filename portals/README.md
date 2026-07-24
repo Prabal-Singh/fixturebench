@@ -29,6 +29,8 @@ See the full **[catalog](../docs/catalog.md)** and **[how to add a portal](../do
 | v19 | Acknowledge to reveal | 8018 |
 | v20 | MFA / OTP handoff | 8019 |
 | v21 | Virtualized order grid | 8020 |
+| v22 | Multi-buyer PO ambiguity | 8021 |
+| v23 | Stale cached detail | 8022 |
 
 ## Credentials (all envs in this pack)
 

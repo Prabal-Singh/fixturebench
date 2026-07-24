@@ -120,6 +120,16 @@ PORTAL_SPECS: dict[PortalVersion, dict[str, object]] = {
         "default_port": 8020,
         "challenge": "virtualized-grid",
     },
+    "v22": {
+        "server": "portals/v22/server.py",
+        "default_port": 8021,
+        "challenge": "multi-buyer-ambiguity",
+    },
+    "v23": {
+        "server": "portals/v23/server.py",
+        "default_port": 8022,
+        "challenge": "stale-cache",
+    },
 }
 
 PORTAL_CHALLENGES: dict[PortalVersion, str] = {

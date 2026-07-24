@@ -44,8 +44,8 @@ jobs:
                   assert r.status == 200, r.status
               print("v19 ok", url)
           PY
-      - name: Write-back + virtualized portal tests
-        run: pytest -q tests/test_writeback.py tests/test_virtualized_grid.py
+      - name: Write-back + portal invariant tests
+        run: pytest -q tests/test_writeback.py tests/test_virtualized_grid.py tests/test_final_portals.py
       - name: Smoke eval
         run: |
           PYTHONPATH=. fixturebench run \

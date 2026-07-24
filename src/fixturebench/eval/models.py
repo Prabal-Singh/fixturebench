@@ -27,6 +27,8 @@ PortalVersion = Literal[
     "v19",
     "v20",
     "v21",
+    "v22",
+    "v23",
 ]
 CaseOutcome = Literal["extract_po", "confirm_empty", "acknowledge_po"]
 

@@ -7,10 +7,10 @@ from fixturebench.eval.portal import PORTAL_CHALLENGES, PORTAL_SPECS
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_portal_registry_covers_v1_through_v21() -> None:
-    expected = {f"v{i}" for i in range(1, 22)}
+def test_portal_registry_covers_v1_through_v23() -> None:
+    expected = {f"v{i}" for i in range(1, 24)}
     assert set(PORTAL_SPECS) == expected
-    assert len(PORTAL_CHALLENGES) == 21
+    assert len(PORTAL_CHALLENGES) == 23
 
 
 def test_each_portal_server_file_exists() -> None:

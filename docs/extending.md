@@ -58,9 +58,10 @@ Adapter aliases (still procurement-shaped):
 ## Good next challenges (same domain)
 
 - More write-backs: quantity change / ASN submit → assert portal state (see `acknowledge_po`)
-- Virtualized order grids (must scroll to mount rows)
-- Stale cached detail until hard refresh
-- Two Open POs with the same number under different buyers
+- Captcha-style timing gate
+- Multi-site hop (login on A, open record on B)
+
+Catalog portals v1–v23 cover the core + hard UI traps (including multi-buyer ambiguity and stale cache).
 
 ### Write-back cases
 

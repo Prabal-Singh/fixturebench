@@ -51,6 +51,12 @@ class PlaywrightSmokeAgent:
                 link = page.locator(
                     f'[data-testid="po-link-{task.target_id}"], a:has-text("{task.target_id}")'
                 ).first
+                # v22 multi-buyer: prefer Midwest Foods when multiple PO links share a number
+                midwest = page.locator(
+                    f'a[data-testid="po-link-{task.target_id}"][data-buyer="Midwest Foods Co-op"]'
+                )
+                if midwest.count():
+                    link = midwest.first
                 link.click()
                 page.wait_for_load_state("domcontentloaded")
                 steps += 1
@@ -65,6 +71,13 @@ class PlaywrightSmokeAgent:
                 ack = page.locator('[data-testid="acknowledge-button"]')
                 if ack.count():
                     ack.first.click()
+                    page.wait_for_load_state("domcontentloaded")
+                    steps += 1
+
+                # v23 stale cache: refresh to live source before extracting
+                refresh = page.locator('[data-testid="refresh-from-source"]')
+                if refresh.count():
+                    refresh.first.click()
                     page.wait_for_load_state("domcontentloaded")
                     steps += 1
 

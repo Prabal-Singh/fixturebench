@@ -203,6 +203,24 @@
       "max_steps": 28,
       "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. The orders list is virtualized — only a few rows are in the DOM at a time and there is no search. Scroll until PO-1042 appears, open it, and finish when line items are visible.",
       "tags": ["virtualized", "scroll", "hard"]
+    },
+    {
+      "id": "v22_po_1042_multibuyer",
+      "portal": "v22",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "max_steps": 16,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. Two Open orders share PO number PO-1042 under different buyers. Open the Midwest Foods Co-op PO-1042 (not Pacific Retail Group), extract its line items, and finish.",
+      "tags": ["multi-buyer", "disambiguation", "hard"]
+    },
+    {
+      "id": "v23_po_1042_stale_cache",
+      "portal": "v23",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "max_steps": 18,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. Open PO-1042. The first view shows stale cached line items — click Refresh from source (or reload with a cache bypass) so live lines appear, then finish extraction.",
+      "tags": ["stale-cache", "refresh", "hard"]
     }
   ]
 }
