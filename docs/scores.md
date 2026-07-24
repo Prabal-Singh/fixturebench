@@ -25,7 +25,8 @@ PYTHONPATH=. fixturebench run \
 From the Scruffy repo:
 
 ```bash
-pip install -e ".[portal,dev,fixturebench]"
+pip install -e ".[portal,dev]"
+pip install "fixturebench[envs,playwright] @ git+https://github.com/Prabal-Singh/fixturebench.git"
 playwright install chromium
 PYTHONPATH=src:. fixturebench run \
   --agent scruffy.fixturebench_agent:ScruffyDeterministicAgent \
