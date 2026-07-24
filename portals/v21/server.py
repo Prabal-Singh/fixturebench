@@ -13,6 +13,13 @@ from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+import sys
+from pathlib import Path as _Path
+_REPO_ROOT = _Path(__file__).resolve().parents[2]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from portals._shared.templating import render
+
 V21_DIR = Path(__file__).resolve().parent
 DATA_PATH = V21_DIR / "data" / "orders.json"
 SESSION_COOKIE = "fixturebench_portal_v21_session"
@@ -58,14 +65,10 @@ def create_app() -> FastAPI:
     async def login_page(request: Request, error: Optional[str] = None):
         if _require_auth(request):
             return RedirectResponse(url="/orders", status_code=302)
-        return templates.TemplateResponse(
-            "login.html",
-            {
-                "request": request,
+        return render(templates, request, "login.html", {
                 "portal_title": data["buyer"]["portal_title"],
                 "error": "Invalid email or password." if error else None,
-            },
-        )
+            })
 
     @app.post("/login")
     async def login_submit(
@@ -86,17 +89,13 @@ def create_app() -> FastAPI:
         if not user:
             return RedirectResponse(url="/login", status_code=302)
         # Intentionally do NOT render order rows server-side — only the virtual shell.
-        return templates.TemplateResponse(
-            "orders.html",
-            {
-                "request": request,
+        return render(templates, request, "orders.html", {
                 "portal_title": data["buyer"]["portal_title"],
                 "user_email": user,
                 "total_orders": len(data["orders"]),
                 "row_height": row_height,
                 "viewport_rows": viewport_rows,
-            },
-        )
+            })
 
     @app.get("/api/orders/window")
     async def orders_window(request: Request, offset: int = 0, limit: int = 12):
@@ -126,16 +125,12 @@ def create_app() -> FastAPI:
         order = next((o for o in data["orders"] if o["po_number"] == po_number), None)
         if order is None:
             return RedirectResponse(url="/orders", status_code=302)
-        return templates.TemplateResponse(
-            "order_detail.html",
-            {
-                "request": request,
+        return render(templates, request, "order_detail.html", {
                 "portal_title": data["buyer"]["portal_title"],
                 "user_email": user,
                 "buyer_name": data["buyer"]["name"],
                 "order": order,
-            },
-        )
+            })
 
     return app
 

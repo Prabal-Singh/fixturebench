@@ -13,6 +13,13 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+import sys
+from pathlib import Path as _Path
+_REPO_ROOT = _Path(__file__).resolve().parents[2]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from portals._shared.templating import render
+
 V8_DIR = Path(__file__).resolve().parent
 DATA_PATH = V8_DIR / "data" / "orders.json"
 SESSION_COOKIE = "fixturebench_portal_v8_session"
@@ -47,10 +54,7 @@ def create_app() -> FastAPI:
     async def login_page(request: Request, error: Optional[str] = None):
         if _require_auth(request):
             return RedirectResponse(url="/orders", status_code=302)
-        return templates.TemplateResponse(
-            "login.html",
-            {"request": request, "portal_title": data["buyer"]["portal_title"], "error": "Invalid email or password." if error else None},
-        )
+        return render(templates, request, "login.html", {"portal_title": data["buyer"]["portal_title"], "error": "Invalid email or password." if error else None})
 
     @app.post("/login")
     async def login_submit(request: Request, email: str = Form(...), password: str = Form(...)) -> RedirectResponse:
@@ -71,17 +75,13 @@ def create_app() -> FastAPI:
         modal_order = None
         if modal:
             modal_order = next((o for o in data["orders"] if o["po_number"] == modal), None)
-        return templates.TemplateResponse(
-            "orders.html",
-            {
-                "request": request,
+        return render(templates, request, "orders.html", {
                 "portal_title": data["buyer"]["portal_title"],
                 "user_email": user,
                 "orders": data["orders"],
                 "modal_order": modal_order,
                 "buyer_name": data["buyer"]["name"],
-            },
-        )
+            })
 
     @app.get("/orders/{po_number}", response_class=HTMLResponse)
     async def order_detail_redirect(po_number: str) -> RedirectResponse:

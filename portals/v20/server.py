@@ -13,6 +13,13 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+import sys
+from pathlib import Path as _Path
+_REPO_ROOT = _Path(__file__).resolve().parents[2]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from portals._shared.templating import render
+
 V20_DIR = Path(__file__).resolve().parent
 DATA_PATH = V20_DIR / "data" / "orders.json"
 SESSION_COOKIE = "fixturebench_portal_v20_session"
@@ -62,14 +69,10 @@ def create_app() -> FastAPI:
             return RedirectResponse(url="/orders", status_code=302)
         if _pending_email(request):
             return RedirectResponse(url="/mfa", status_code=302)
-        return templates.TemplateResponse(
-            "login.html",
-            {
-                "request": request,
+        return render(templates, request, "login.html", {
                 "portal_title": data["buyer"]["portal_title"],
                 "error": "Invalid email or password." if error else None,
-            },
-        )
+            })
 
     @app.post("/login")
     async def login_submit(
@@ -91,15 +94,11 @@ def create_app() -> FastAPI:
         email = _pending_email(request)
         if not email:
             return RedirectResponse(url="/login", status_code=302)
-        return templates.TemplateResponse(
-            "mfa.html",
-            {
-                "request": request,
+        return render(templates, request, "mfa.html", {
                 "portal_title": data["buyer"]["portal_title"],
                 "user_email": email,
                 "error": "Invalid verification code." if error else None,
-            },
-        )
+            })
 
     @app.post("/mfa")
     async def mfa_submit(request: Request, code: str = Form(...)) -> RedirectResponse:
@@ -121,15 +120,11 @@ def create_app() -> FastAPI:
             if _pending_email(request):
                 return RedirectResponse(url="/mfa", status_code=302)
             return RedirectResponse(url="/login", status_code=302)
-        return templates.TemplateResponse(
-            "orders.html",
-            {
-                "request": request,
+        return render(templates, request, "orders.html", {
                 "portal_title": data["buyer"]["portal_title"],
                 "user_email": user,
                 "orders": data["orders"],
-            },
-        )
+            })
 
     @app.get("/orders/{po_number}", response_class=HTMLResponse)
     async def order_detail(request: Request, po_number: str):
@@ -141,16 +136,12 @@ def create_app() -> FastAPI:
         order = next((o for o in data["orders"] if o["po_number"] == po_number), None)
         if order is None:
             return RedirectResponse(url="/orders", status_code=302)
-        return templates.TemplateResponse(
-            "order_detail.html",
-            {
-                "request": request,
+        return render(templates, request, "order_detail.html", {
                 "portal_title": data["buyer"]["portal_title"],
                 "user_email": user,
                 "buyer_name": data["buyer"]["name"],
                 "order": order,
-            },
-        )
+            })
 
     return app
 
