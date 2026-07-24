@@ -223,6 +223,8 @@ Also shipped: [`examples/playwright_smoke_agent.py`](examples/playwright_smoke_a
 
 Hard band (`--tags hard`): v14–v23.
 
+Published baselines: [docs/scores.md](docs/scores.md).
+
 Full matrix: [docs/catalog.md](docs/catalog.md). Add a portal variant: [docs/extending.md](docs/extending.md).
 
 ---
@@ -263,7 +265,16 @@ fixturebench/
 
 ## Status
 
-**v0.7** — portal catalog complete (v1–v23), write-back scoring, CI smoke.
+**v0.7** — portal catalog complete (v1–v23), write-back scoring, CI smoke, Scruffy dogfood.
+
+### Published scores
+
+| Agent | Band | Score |
+|-------|------|-------|
+| `playwright-smoke` | smoke | **4/4** |
+| `scruffy-deterministic` | smoke | **4/4** |
+
+Details + reproduce steps: [docs/scores.md](docs/scores.md).
 
 Roadmap (stays in procurement):
 
@@ -271,8 +282,9 @@ Roadmap (stays in procurement):
 - [x] Virtualized order grid
 - [x] Stale cache / multi-buyer PO ambiguity
 - [x] GitHub Action for CI eval
+- [x] Scruffy CI dogfood + published scores
 - [ ] More write-backs (qty change / ASN)
-- [ ] Scruffy CI dogfood + published scores
+- [ ] Publish stable agentic hard-band scores (Ollama)
 
 ---
 

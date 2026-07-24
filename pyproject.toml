@@ -1,6 +1,6 @@
 [project]
 name = "fixturebench"
-version = "0.7.0"
+version = "0.7.1"
 description = "Deterministic eval for procurement browser agents (buyer/supplier portals)"
 readme = "README.md"
 requires-python = ">=3.9"

@@ -19,10 +19,30 @@ def test_checkout_root_from_package() -> None:
     assert _looks_ok(root)
 
 
-def test_discover_root_from_tmp(tmp_path: Path) -> None:
-    # Even from an unrelated cwd, package checkout should resolve.
-    root = discover_root(tmp_path)
-    assert _looks_ok(root)
+def test_discover_root_ignores_scruffy_like_layout(tmp_path: Path) -> None:
+    """A checkout with portals/ + eval/ but no FixtureBench identity must not win."""
+    decoy = tmp_path / "scruffy-like"
+    (decoy / "eval").mkdir(parents=True)
+    (decoy / "portals").mkdir()
+    (decoy / "eval" / "cases.json").write_text("{}", encoding="utf-8")
+    (decoy / "pyproject.toml").write_text('name = "scruffy"\n', encoding="utf-8")
+
+    root = discover_root(decoy)
+    assert root != decoy
+    assert (root / "src" / "fixturebench").is_dir() or (
+        root / "portals" / "_shared" / "templating.py"
+    ).is_file()
+
+
+def test_fixturebench_root_env_override(tmp_path: Path, monkeypatch) -> None:
+    import os
+
+    real = checkout_root()
+    assert real is not None
+    monkeypatch.setenv("FIXTUREBENCH_ROOT", str(real))
+    assert discover_root(tmp_path) == real.resolve()
+    monkeypatch.delenv("FIXTUREBENCH_ROOT", raising=False)
+    os.environ.pop("FIXTUREBENCH_ROOT", None)
 
 
 def test_eval_task_aliases() -> None:

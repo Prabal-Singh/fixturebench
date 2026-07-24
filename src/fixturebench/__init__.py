@@ -4,7 +4,7 @@ from fixturebench.api import run
 from fixturebench.adapters import AgentRunResult, BrowserAgent, EvalTask
 from fixturebench.eval import EvalRunner
 
-__version__ = "0.7.0"
+__version__ = "0.7.1"
 
 __all__ = [
     "AgentRunResult",
