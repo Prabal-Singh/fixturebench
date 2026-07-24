@@ -1,10 +1,10 @@
 # FixtureBench
 
-**Plug-and-play eval for browser agents.**
+**Deterministic eval for browser agents that work buyer / supplier portals.**
 
-Drop in your agent. FixtureBench starts the environments, runs the cases, scores structured output against golden fixtures, and writes a report.
+Fake Coupa-style portals. Real failure modes (pagination, CSV export, session expiry, MFA, decoy POs). Score extracted purchase orders against golden fixtures — not LLM judges, not live websites.
 
-No live websites. No LLM judges. No framework lock-in.
+Built for teams automating **procurement workflows** (login → find PO → extract / acknowledge). Not another generic web-agent leaderboard — those already exist.
 
 ---
 
@@ -39,9 +39,9 @@ PYTHONPATH=. fixturebench run \
 
 You should see **4/4 PASS** on the smoke tag (v1, v2, v3, v13).
 
-### Plug in your own agent
+### Plug in your agent
 
-Implement **one method**. FixtureBench handles the rest.
+Any browser stack works. Implement **one method**; FixtureBench starts portals, runs cases, and scores.
 
 ```python
 # my_agent.py
@@ -53,12 +53,12 @@ class MyAgent:
         return "my-agent"
 
     def run(self, task: EvalTask) -> AgentRunResult:
-        # task.url        — environment already running
-        # task.goal       — natural-language instruction
-        # task.target_id  — record to find (e.g. PO-1042)
+        # task.url        — portal already running
+        # task.goal       — e.g. open PO-1042 and extract lines
+        # task.target_id  — PO number
         # task.email / task.password / task.max_steps / task.headless
         ...
-        return AgentRunResult(success=True, payload=extracted_record, step_count=7)
+        return AgentRunResult(success=True, payload=extracted_po, step_count=7)
 ```
 
 ```bash
@@ -79,7 +79,7 @@ print(report.summary.passed, "/", report.summary.total)
 
 ## Example: Playwright + agentic (LLM) loop
 
-Deterministic scripts solve the easy cases. Real agents need an **observe → reason → act** loop. Here's the shape — full file: [`examples/playwright_agentic_agent.py`](examples/playwright_agentic_agent.py).
+Deterministic scripts solve easy cases. Real portal agents need **observe → reason → act**. Shape below — full file: [`examples/playwright_agentic_agent.py`](examples/playwright_agentic_agent.py).
 
 ```python
 import json
@@ -105,7 +105,6 @@ class PlaywrightAgenticAgent:
 
             for _ in range(task.max_steps):
                 steps += 1
-                # 1. OBSERVE — cheap page snapshot for the model
                 observation = {
                     "url": page.url,
                     "title": page.title(),
@@ -116,9 +115,8 @@ class PlaywrightAgenticAgent:
                     ],
                 }
 
-                # 2. REASON — LLM picks the next action
                 action = complete_json(
-                    system="You drive a browser. Reply with JSON only.",
+                    system="You drive a buyer portal. Reply with JSON only.",
                     user={
                         "goal": task.goal,
                         "email": task.email,
@@ -129,13 +127,12 @@ class PlaywrightAgenticAgent:
                             "action": ACTIONS,
                             "selector": "css or text selector",
                             "text": "for type/press",
-                            "payload": "on finish: extracted record dict",
+                            "payload": "on finish: extracted PO dict",
                             "reason": "short",
                         },
                     },
                 )
 
-                # 3. ACT — Playwright executes precisely
                 kind = action["action"]
                 if kind == "click":
                     page.click(action["selector"])
@@ -175,7 +172,7 @@ PYTHONPATH=. fixturebench run \
   --case v1_po_1042 --headed
 ```
 
-**Design rule:** the LLM chooses intent; Playwright executes. FixtureBench scores the structured `payload` against golden fixtures — not the LLM's prose.
+**Design rule:** the LLM chooses intent; Playwright executes. FixtureBench scores the structured PO `payload` against golden fixtures.
 
 Also shipped: [`examples/playwright_smoke_agent.py`](examples/playwright_smoke_agent.py) — no LLM, good for CI smoke.
 
@@ -186,24 +183,24 @@ Also shipped: [`examples/playwright_smoke_agent.py`](examples/playwright_smoke_a
 | Concern | You | FixtureBench |
 |---------|-----|--------------|
 | Browser agent logic | ✅ | |
-| Start / stop environments | | ✅ |
+| Start / stop fake portals | | ✅ |
 | Case registry & filters | | ✅ |
 | Credentials & goals | | ✅ |
-| Golden-fixture scoring | | ✅ |
+| Golden-fixture PO scoring | | ✅ |
 | JSON reports & metrics | | ✅ |
 
 ---
 
-## Bundled environment pack
+## Portal catalog
 
-15 cases across 13 self-hosted sites covering real agent failure modes:
+22 cases across 20 self-hosted buyer portals:
 
 | Env | Challenge |
 |-----|-----------|
-| **v1** | Baseline extraction |
+| **v1** | Baseline PO extraction |
 | **v2** | Messy headers / labels |
 | **v3** | Pagination |
-| **v4** | CSV-only data |
+| **v4** | CSV-only line items |
 | **v5** | Secondary tab |
 | **v6** | Collapsed accordion |
 | **v7** | Session expiry |
@@ -213,21 +210,32 @@ Also shipped: [`examples/playwright_smoke_agent.py`](examples/playwright_smoke_a
 | **v11** | Iframe content |
 | **v12** | Delayed JS load |
 | **v13** | Empty state (graceful no-op) |
+| **v14** | Lazy accordion (DOM-absent until expand) |
+| **v15** | Unlabeled / ambiguous fields |
+| **v16** | Nested Actions → Export menu |
+| **v17** | Near-duplicate decoy POs |
+| **v18** | Anti-bot interstitial |
+| **v19** | Acknowledge before reveal |
+| **v20** | MFA / OTP handoff |
 
-Full matrix: [docs/catalog.md](docs/catalog.md). Add your own pack: [docs/extending.md](docs/extending.md).
+Hard band (`--tags hard`): v14–v20.
+
+Full matrix: [docs/catalog.md](docs/catalog.md). Add a portal variant: [docs/extending.md](docs/extending.md).
 
 ---
 
 ## Why this exists
 
-Research benchmarks optimize for leaderboards on consumer web tasks. Production agent teams need CI-grade regression:
+Generic browser-agent benchmarks (WebArena, Mind2Web, BrowserGym, …) cover consumer and open-web tasks. Procurement agents fail on a different surface: enterprise supplier portals with ugly tables, exports, sessions, and acknowledgements.
 
-- **Deterministic** — same input → same expected output
-- **Workflow-shaped** — login → navigate → extract / act
-- **Programmatic scoring** — fixtures, not LLM-as-judge
-- **Agent-agnostic** — one adapter method, any stack
+FixtureBench is a **CI-grade regression suite for that niche**:
 
-Started as an internal eval layer, generalized into a standalone harness.
+- **Deterministic** — fake portals, fixed data, same expected PO every run
+- **Workflow-shaped** — login → navigate → extract / act on purchase orders
+- **Programmatic scoring** — golden fixtures, not LLM-as-judge
+- **Agent-agnostic** — one adapter method; bring Playwright, Stagehand, your stack
+
+Started as an internal eval layer for a procurement browser-agent product.
 
 ---
 
@@ -235,14 +243,14 @@ Started as an internal eval layer, generalized into a standalone harness.
 
 ```
 fixturebench/
-├── eval/cases.json
-├── portals/                 # First env pack
+├── eval/cases.json          # PO extraction / empty-state cases
+├── portals/                 # Fake buyer portals (v1–v20)
 ├── examples/
-│   ├── playwright_smoke_agent.py      # deterministic demo
-│   └── playwright_agentic_agent.py    # LLM + Playwright loop
+│   ├── playwright_smoke_agent.py
+│   └── playwright_agentic_agent.py
 ├── src/fixturebench/
-│   ├── cli.py               # `fixturebench` command
-│   ├── api.py               # run(agent)
+│   ├── cli.py
+│   ├── api.py
 │   ├── adapters/
 │   └── eval/
 └── docs/
@@ -252,13 +260,13 @@ fixturebench/
 
 ## Status
 
-**v0.3 — plug-and-play.** CLI, `run(agent)` API, smoke + agentic Playwright examples.
+**v0.5** — write-back scoring (`acknowledge_po`), 20 portals, smoke / core / hard bands, CI workflow.
 
-Roadmap:
+Roadmap (stays in procurement):
 
-- [ ] Second environment pack
-- [ ] Write-back / state-mutation scoring
-- [ ] GitHub Action for CI eval
+- [x] Write-back scoring (acknowledge → assert server state)
+- [ ] Harder portal traps (virtualized grids, stale cache, multi-buyer ambiguity)
+- [x] GitHub Action for CI eval
 
 ---
 

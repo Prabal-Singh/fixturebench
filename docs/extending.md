@@ -1,8 +1,6 @@
 # Extending FixtureBench
 
-FixtureBench separates **harness** (run cases, score, report) from **environment packs** (fake sites + fixtures + case registry).
-
-The first pack lives in `portals/` and exercises structured extraction. Add more packs without rewriting the agent adapter.
+FixtureBench is a **buyer-portal / PO workflow** eval suite. Extend it by adding more portal variants and cases in that domain — not by turning it into a generic web benchmark.
 
 ## Plug in an agent (30 seconds)
 
@@ -15,50 +13,68 @@ class MyAgent:
         return "my-agent"
 
     def run(self, task: EvalTask) -> AgentRunResult:
-        # task.url, task.goal, task.target_id, task.email, task.password
-        return AgentRunResult(success=True, payload=extracted)
+        # task.url, task.goal, task.target_id (PO number), task.email, task.password
+        return AgentRunResult(success=True, payload=extracted_po)
 
 report = run(MyAgent(), tags=["smoke"])
 ```
 
 Or CLI: `fixturebench run --agent my_agent:MyAgent --tag smoke`
 
-## What you need for a new pack
+## Adding a portal variant
 
-1. **Environment(s)** — self-hosted site(s) under `portals/` or `environments/my_pack/`
-2. **Golden fixtures** — expected structured outputs under `tests/fixtures/`
-3. **Cases** — entries in `eval/cases.json`
-4. **Scorer** — field-level compare for your schema (today: `compare_po` for the extraction pack)
+1. **Portal** — copy an existing `portals/vN/` and change one primary challenge
+2. **Golden fixture** — expected PO JSON under `tests/fixtures/` (reuse when data matches)
+3. **Case** — entry in `eval/cases.json` with tags (`smoke` / `hard` / challenge name)
+4. **Registry** — add the version to `PortalVersion` and `PORTAL_SPECS`
+5. **Invariant test** — lock the challenge (e.g. decoys precede the real PO)
 
 ## Minimal case shape
 
 ```json
 {
-  "id": "my_task_001",
-  "portal": "v1",
+  "id": "v21_po_1042_example",
+  "portal": "v21",
   "po_number": "PO-1042",
   "expected_fixture": "tests/fixtures/expected_po_1042.json",
-  "tags": ["smoke"]
+  "tags": ["hard", "your-challenge"]
 }
 ```
 
-Today `portal` / `po_number` naming reflects the first pack. Prefer adapter aliases:
+Adapter aliases (still procurement-shaped):
 
-- `task.url` (not only `portal_url`)
-- `task.target_id` (not only `po_number`)
-- `AgentRunResult(payload=...)` (not only `po=...`)
+- `task.url` / `task.portal_url`
+- `task.target_id` / `task.po_number`
+- `AgentRunResult(payload=...)` / `po=...`
 
-## Design rules for good environments
+## Design rules for good portals
 
-- **Deterministic** — no live third-party sites
+- **Deterministic** — no live third-party buyer sites
 - **One primary failure mode per env**
-- **Programmatic expected state** — fixtures, not LLM judges
+- **Programmatic expected state** — fixtures (and later server-state asserts), not LLM judges
 - **Realistic but small** — CI-friendly
+- **Stay in domain** — POs, line items, acknowledgements, sessions, exports — not “book a flight”
 
-## Contributing a pack
+## Good next challenges (same domain)
+
+- More write-backs: quantity change / ASN submit → assert portal state (see `acknowledge_po`)
+- Virtualized order grids (must scroll to mount rows)
+- Stale cached detail until hard refresh
+- Two Open POs with the same number under different buyers
+
+### Write-back cases
+
+Set `"outcome": "acknowledge_po"` plus:
+
+- `expected_fixture` — PO JSON after lines unlock
+- `expected_state` — portal server snapshot, e.g. `{"po_number":"PO-1042","acknowledged":true,"status":"Acknowledged"}`
+
+Expose harness-only `GET /api/eval/orders/{po_number}` on the portal so scoring does not depend on the agent's cookies.
+
+## Contributing
 
 Open a PR with:
 
-1. Self-hosted env + catalog section
+1. Self-hosted portal + catalog row
 2. At least one golden fixture + one case
 3. A regression test locking the challenge invariant

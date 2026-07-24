@@ -1,8 +1,8 @@
-# First environment pack — structured extraction
+# Fake buyer portals
 
-Self-hosted fake sites for browser-agent eval. Lives under `portals/` for historical reasons; conceptually this is FixtureBench's first **environment pack**.
+Self-hosted Coupa-style supplier portals for procurement browser-agent eval.
 
-See the full **[pack catalog](../docs/catalog.md)** and **[how to add packs](../docs/extending.md)**.
+See the full **[catalog](../docs/catalog.md)** and **[how to add a portal](../docs/extending.md)**.
 
 ## Quick reference
 
@@ -21,6 +21,13 @@ See the full **[pack catalog](../docs/catalog.md)** and **[how to add packs](../
 | v11 | Iframe detail | 8010 |
 | v12 | Delayed JS load | 8011 |
 | v13 | Empty state | 8012 |
+| v14 | Lazy accordion (DOM-absent) | 8013 |
+| v15 | Unlabeled fields | 8014 |
+| v16 | Nested Actions → Export | 8015 |
+| v17 | Decoy / near-duplicate rows | 8016 |
+| v18 | Anti-bot interstitial | 8017 |
+| v19 | Acknowledge to reveal | 8018 |
+| v20 | MFA / OTP handoff | 8019 |
 
 ## Credentials (all envs in this pack)
 

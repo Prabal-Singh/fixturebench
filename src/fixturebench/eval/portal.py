@@ -78,6 +78,41 @@ PORTAL_SPECS: dict[PortalVersion, dict[str, object]] = {
         "default_port": 8012,
         "challenge": "empty-orders",
     },
+    "v14": {
+        "server": "portals/v14/server.py",
+        "default_port": 8013,
+        "challenge": "lazy-accordion",
+    },
+    "v15": {
+        "server": "portals/v15/server.py",
+        "default_port": 8014,
+        "challenge": "unlabeled-fields",
+    },
+    "v16": {
+        "server": "portals/v16/server.py",
+        "default_port": 8015,
+        "challenge": "nested-export-menu",
+    },
+    "v17": {
+        "server": "portals/v17/server.py",
+        "default_port": 8016,
+        "challenge": "decoy-rows",
+    },
+    "v18": {
+        "server": "portals/v18/server.py",
+        "default_port": 8017,
+        "challenge": "antibot-interstitial",
+    },
+    "v19": {
+        "server": "portals/v19/server.py",
+        "default_port": 8018,
+        "challenge": "acknowledge-writeback",
+    },
+    "v20": {
+        "server": "portals/v20/server.py",
+        "default_port": 8019,
+        "challenge": "mfa-handoff",
+    },
 }
 
 PORTAL_CHALLENGES: dict[PortalVersion, str] = {

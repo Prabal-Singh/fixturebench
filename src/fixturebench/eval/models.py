@@ -19,8 +19,15 @@ PortalVersion = Literal[
     "v11",
     "v12",
     "v13",
+    "v14",
+    "v15",
+    "v16",
+    "v17",
+    "v18",
+    "v19",
+    "v20",
 ]
-CaseOutcome = Literal["extract_po", "confirm_empty"]
+CaseOutcome = Literal["extract_po", "confirm_empty", "acknowledge_po"]
 
 
 class EvalDefaults(BaseModel):
@@ -44,6 +51,7 @@ class EvalCase(BaseModel):
     po_number: str = ""
     outcome: CaseOutcome = "extract_po"
     expected_fixture: str = ""
+    expected_state: str = ""
     tags: List[str] = Field(default_factory=list)
     portal_url: Optional[str] = None
     manage_portal: bool = True
@@ -69,6 +77,15 @@ class POComparison(BaseModel):
     mismatches: List[str] = Field(default_factory=list)
 
 
+class StateComparison(BaseModel):
+    """Comparison between portal server state and expected write-back state."""
+
+    passed: bool
+    mismatches: List[str] = Field(default_factory=list)
+    actual: dict[str, Any] = Field(default_factory=dict)
+    expected: dict[str, Any] = Field(default_factory=dict)
+
+
 class EvalCaseMetrics(BaseModel):
     """Timing and efficiency metrics for a single case run."""
 
@@ -88,10 +105,12 @@ class EvalCaseResult(BaseModel):
     po_number: str
     agent_success: bool
     extraction_pass: bool
+    state_pass: Optional[bool] = None
     passed: bool
     metrics: EvalCaseMetrics
     failure_reason: Optional[str] = None
     po_comparison: Optional[POComparison] = None
+    state_comparison: Optional[StateComparison] = None
     agent_metadata: dict[str, Any] = Field(default_factory=dict)
 
 

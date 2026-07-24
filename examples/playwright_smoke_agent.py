@@ -61,6 +61,13 @@ class PlaywrightSmokeAgent:
                     expand.first.click()
                     steps += 1
 
+                # v19 write-back: acknowledge before lines unlock
+                ack = page.locator('[data-testid="acknowledge-button"]')
+                if ack.count():
+                    ack.first.click()
+                    page.wait_for_load_state("domcontentloaded")
+                    steps += 1
+
                 page.wait_for_timeout(1600)  # covers v12 delayed load
 
                 po = self._extract_po(page, task)

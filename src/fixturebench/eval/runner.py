@@ -9,6 +9,7 @@ from fixturebench.eval.cases import (
     case_headless,
     case_max_steps,
     load_expected_po,
+    load_expected_state,
     load_suite,
     resolve_cases,
 )
@@ -23,7 +24,7 @@ from fixturebench.eval.models import (
 )
 from fixturebench.eval.portal import ManagedPortal, PORTAL_SPECS
 from fixturebench.eval.report import new_run_id, utc_now, write_report
-from fixturebench.eval.scorer import compare_po
+from fixturebench.eval.scorer import compare_po, compare_portal_state, fetch_portal_state
 
 
 class EvalRunner:
@@ -122,15 +123,55 @@ class EvalRunner:
         agent_result,
     ) -> EvalCaseResult:
         comparison = None
+        state_comparison = None
         extraction_pass = False
+        state_pass: bool | None = None
+        failure_reason = agent_result.failure_reason
 
         if case.outcome == "confirm_empty":
             extraction_pass = agent_result.po is None
             passed = agent_result.success and extraction_pass
+            if agent_result.success and not extraction_pass:
+                failure_reason = failure_reason or "Expected no PO payload for empty-state case"
+        elif case.outcome == "acknowledge_po":
+            expected_state = load_expected_state(self.root, case)
+            if agent_result.po is not None and expected is not None:
+                comparison = compare_po(agent_result.po, expected)
+                extraction_pass = comparison.passed
+            if expected_state is not None:
+                try:
+                    actual_state = fetch_portal_state(portal_url, case.po_number)
+                    state_comparison = compare_portal_state(actual_state, expected_state)
+                    state_pass = state_comparison.passed
+                except RuntimeError as exc:
+                    state_pass = False
+                    state_comparison = None
+                    failure_reason = failure_reason or str(exc)
+            passed = bool(
+                agent_result.success and extraction_pass and state_pass is True
+            )
+            if agent_result.success and extraction_pass and state_pass is False:
+                mismatches = (
+                    "; ".join(state_comparison.mismatches)
+                    if state_comparison and state_comparison.mismatches
+                    else "portal state mismatch"
+                )
+                failure_reason = failure_reason or f"Write-back failed: {mismatches}"
+            elif agent_result.success and not extraction_pass:
+                mismatches = (
+                    "; ".join(comparison.mismatches)
+                    if comparison and comparison.mismatches
+                    else "PO extraction mismatch"
+                )
+                failure_reason = failure_reason or mismatches
         elif agent_result.po is not None and expected is not None:
             comparison = compare_po(agent_result.po, expected)
             extraction_pass = comparison.passed
             passed = agent_result.success and extraction_pass
+            if agent_result.success and not extraction_pass:
+                failure_reason = failure_reason or (
+                    "; ".join(comparison.mismatches) if comparison.mismatches else "PO mismatch"
+                )
         else:
             passed = False
 
@@ -143,10 +184,12 @@ class EvalRunner:
             po_number=case.po_number,
             agent_success=agent_result.success,
             extraction_pass=extraction_pass,
+            state_pass=state_pass,
             passed=passed,
             metrics=metrics,
-            failure_reason=agent_result.failure_reason,
+            failure_reason=failure_reason,
             po_comparison=comparison,
+            state_comparison=state_comparison,
             agent_metadata=agent_result.metadata,
         )
 

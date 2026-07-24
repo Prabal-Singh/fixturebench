@@ -1,6 +1,11 @@
 from __future__ import annotations
 
-from fixturebench.eval.models import POComparison
+import json
+import urllib.error
+import urllib.request
+from typing import Any
+
+from fixturebench.eval.models import POComparison, StateComparison
 from fixturebench.models.po import RawPOLine, RawPurchaseOrder
 
 
@@ -32,6 +37,38 @@ def compare_po(actual: RawPurchaseOrder, expected: RawPurchaseOrder) -> POCompar
         mismatches.extend(_compare_line(index, actual_line, expected_line))
 
     return POComparison(passed=len(mismatches) == 0, mismatches=mismatches)
+
+
+def compare_portal_state(actual: dict[str, Any], expected: dict[str, Any]) -> StateComparison:
+    """Compare portal server state against an expected write-back fixture."""
+    mismatches: list[str] = []
+    for key, want in expected.items():
+        got = actual.get(key)
+        if got != want:
+            mismatches.append(f"state.{key}: got {got!r}, want {want!r}")
+    return StateComparison(
+        passed=len(mismatches) == 0,
+        mismatches=mismatches,
+        actual=actual,
+        expected=expected,
+    )
+
+
+def fetch_portal_state(portal_url: str, po_number: str, *, timeout: float = 5.0) -> dict[str, Any]:
+    """Read harness-only eval state from a running portal."""
+    url = f"{portal_url.rstrip('/')}/api/eval/orders/{po_number}"
+    try:
+        with urllib.request.urlopen(url, timeout=timeout) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"Portal state fetch failed ({exc.code}): {body}") from exc
+    except urllib.error.URLError as exc:
+        raise RuntimeError(f"Portal state fetch failed: {exc}") from exc
+
+    if not isinstance(payload, dict):
+        raise RuntimeError(f"Portal state was not a JSON object: {payload!r}")
+    return payload
 
 
 def _compare_line(index: int, actual: RawPOLine, expected: RawPOLine) -> list[str]:

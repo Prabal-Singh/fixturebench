@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}{{ order.po_number }} — {{ portal_title }}{% endblock %}
+{% block body %}
+<header class="topbar">
+  <div class="brand">{{ portal_title }}</div>
+  <div class="user" data-testid="logged-in-user">{{ user_email }}</div>
+</header>
+<div class="layout">
+  <nav class="sidebar">
+    <a href="/orders" class="active" data-testid="nav-orders">Orders</a>
+  </nav>
+  <main class="content">
+    <div class="breadcrumb">
+      <a href="/orders">Orders</a> / <span data-testid="po-number">{{ order.po_number }}</span>
+    </div>
+    <div class="title-row">
+      <h1 data-testid="po-title">{{ order.po_number }}</h1>
+      <div class="menu-root" data-testid="actions-menu">
+        <button type="button" class="btn btn-inline" data-testid="actions-button" id="actions-btn">
+          Actions ▾
+        </button>
+        <div class="menu-panel hidden" id="actions-panel" data-testid="actions-panel">
+          <button type="button" class="menu-item" data-testid="action-print">Print</button>
+          <button type="button" class="menu-item" data-testid="action-share">Share</button>
+          <div class="menu-item has-submenu" data-testid="action-more">
+            <button type="button" class="menu-item-btn" id="more-btn" data-testid="more-button">
+              More ▸
+            </button>
+            <div class="submenu hidden" id="more-panel" data-testid="more-panel">
+              <a class="menu-item" href="/orders/{{ order.po_number }}/export.csv" data-testid="download-csv">
+                Export CSV
+              </a>
+              <button type="button" class="menu-item" data-testid="action-archive">Archive</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <dl class="meta-grid card">
+      <div>
+        <dt>Buyer</dt>
+        <dd data-testid="po-buyer">{{ buyer_name }}</dd>
+      </div>
+      <div>
+        <dt>Order Date</dt>
+        <dd data-testid="po-order-date">{{ order.order_date }}</dd>
+      </div>
+      <div>
+        <dt>Status</dt>
+        <dd data-testid="po-status">{{ order.status }}</dd>
+      </div>
+    </dl>
+
+    <div class="card export-panel">
+      <h2>Line Items</h2>
+      <p class="muted" data-testid="export-notice">
+        Line-level detail is not rendered here. Use Actions → More → Export CSV.
+      </p>
+    </div>
+  </main>
+</div>
+<style>
+.title-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.menu-root { position: relative; }
+.menu-panel, .submenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 180px;
+  background: #fff;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  z-index: 20;
+  padding: 0.35rem 0;
+}
+.submenu { top: 0; right: 100%; margin-right: 4px; }
+.menu-item, .menu-item-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+  color: var(--text);
+  font: inherit;
+  text-decoration: none;
+}
+.menu-item:hover, .menu-item-btn:hover { background: #eef3f0; }
+.has-submenu { position: relative; padding: 0; }
+.hidden { display: none; }
+</style>
+<script>
+(function () {
+  const actionsBtn = document.getElementById("actions-btn");
+  const actionsPanel = document.getElementById("actions-panel");
+  const moreBtn = document.getElementById("more-btn");
+  const morePanel = document.getElementById("more-panel");
+
+  actionsBtn.addEventListener("click", function (e) {
+    e.stopPropagation();
+    actionsPanel.classList.toggle("hidden");
+    if (actionsPanel.classList.contains("hidden")) {
+      morePanel.classList.add("hidden");
+    }
+  });
+  moreBtn.addEventListener("click", function (e) {
+    e.stopPropagation();
+    morePanel.classList.toggle("hidden");
+  });
+  document.addEventListener("click", function () {
+    actionsPanel.classList.add("hidden");
+    morePanel.classList.add("hidden");
+  });
+})();
+</script>
+{% endblock %}

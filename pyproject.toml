@@ -1,12 +1,20 @@
 [project]
 name = "fixturebench"
-version = "0.3.0"
-description = "Plug-and-play deterministic eval for browser agents"
+version = "0.5.0"
+description = "Deterministic eval for procurement browser agents (buyer/supplier portals)"
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
 authors = [{ name = "Prabal Singh" }]
-keywords = ["browser-agents", "evaluation", "benchmark", "playwright", "testing"]
+keywords = [
+    "browser-agents",
+    "procurement",
+    "buyer-portal",
+    "evaluation",
+    "benchmark",
+    "playwright",
+    "purchase-order",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",

@@ -1,8 +1,8 @@
-# Environment pack catalog — structured extraction
+# Portal catalog — buyer / supplier workflows
 
-First FixtureBench pack: **13 deterministic fake sites** and **15 eval cases** covering failure modes browser agents hit on enterprise UIs (login → navigate → extract structured records).
+**20 deterministic fake buyer portals** and **22 eval cases** covering failure modes procurement browser agents hit (login → find PO → extract / act).
 
-This pack happens to use buyer-portal / PO-shaped data. Treat it as a structured-extraction stress suite, not a procurement-only product.
+This is a **procurement-portal stress suite**, not a general web-agent benchmark.
 
 ## Environment matrix
 
@@ -13,7 +13,7 @@ This pack happens to use buyer-portal / PO-shaped data. Treat it as a structured
 | **v3** | 8002 | Pagination | Target record on page 2 |
 | **v4** | 8003 | CSV export | Lines only in downloadable CSV |
 | **v5** | 8004 | Tab navigation | Target hidden under a secondary tab |
-| **v6** | 8005 | Accordion | Lines collapsed in `<details>` |
+| **v6** | 8005 | Accordion | Lines collapsed in `<details>` (still in DOM) |
 | **v7** | 8006 | Session expiry | Session dies before detail — must re-login |
 | **v8** | 8007 | Modal detail | Detail opens in overlay, not new page |
 | **v9** | 8008 | Messy DOM | No `data-testid`, div-grid layout |
@@ -21,6 +21,13 @@ This pack happens to use buyer-portal / PO-shaped data. Treat it as a structured
 | **v11** | 8010 | Iframe detail | Content inside embedded frame |
 | **v12** | 8011 | Delayed load | Lines appear after JS fetch (~1.5s) |
 | **v13** | 8012 | Empty state | No records — agent must finish gracefully |
+| **v14** | 8013 | Lazy accordion | Lines **absent from DOM** until expand + fetch |
+| **v15** | 8014 | Unlabeled fields | No labels / testids; ambiguous date vs due date |
+| **v16** | 8015 | Nested export menu | Actions → More → Export CSV |
+| **v17** | 8016 | Decoy rows | Near-duplicate PO numbers; must pick exact Open |
+| **v18** | 8017 | Anti-bot interstitial | Human check gate after login |
+| **v19** | 8018 | Acknowledge write-back | Must mutate portal state; harness asserts `/api/eval/...` |
+| **v20** | 8019 | MFA handoff | OTP step after password (`424242`) |
 
 ## Case registry
 
@@ -41,6 +48,13 @@ This pack happens to use buyer-portal / PO-shaped data. Treat it as a structured
 | `v11_po_1042_iframe` | v11 | extract | iframe |
 | `v12_po_1042_delayed` | v12 | extract | delayed-load |
 | `v13_empty_orders` | v13 | **confirm_empty** | empty-state |
+| `v14_po_1042_lazy_accordion` | v14 | extract | **hard**, lazy-accordion |
+| `v15_po_1042_unlabeled` | v15 | extract | **hard**, unlabeled-fields |
+| `v16_po_1042_nested_menu` | v16 | extract | **hard**, nested-menu |
+| `v17_po_1042_decoys` | v17 | extract | **hard**, decoy-rows |
+| `v18_po_1042_interstitial` | v18 | extract | **hard**, antibot |
+| `v19_po_1042_acknowledge` | v19 | **acknowledge_po** | **hard**, write-back |
+| `v20_po_1042_mfa` | v20 | extract | **hard**, mfa |
 
 ## Credentials (this pack)
 
@@ -48,6 +62,21 @@ This pack happens to use buyer-portal / PO-shaped data. Treat it as a structured
 |-------|-------|
 | Email | `vendor@fixturebench.test` |
 | Password | `fixturebench123` |
+| MFA OTP (v20 only) | `424242` |
+
+## Difficulty bands
+
+| Band | Cases | Intent |
+|------|-------|--------|
+| Smoke | `smoke` tag | Fast CI sanity |
+| Core | v1–v13 | Common UI patterns |
+| Hard | `hard` tag (v14–v20) | Realistic traps from agent failures |
+
+Run hard cases only:
+
+```bash
+fixturebench run --agent examples.playwright_agentic_agent:PlaywrightAgenticAgent --tags hard
+```
 
 ## Scoring outcomes
 
@@ -59,11 +88,18 @@ Pass when the agent reports success **and** extracted fields match the golden fi
 
 Pass when the agent reports success **and** returns no payload (`po is None`). Used for empty-state envs where the correct behavior is a graceful no-op.
 
-## Planned pack additions
+### `acknowledge_po` (write-back)
 
-- Write-back / acknowledge cases (state mutation scoring)
-- MFA handoff screen (human-in-the-loop stub)
-- Nested **Actions → Export** menu
-- Duplicate/decoy rows in tables
-- Anti-bot interstitial page
-- Second pack outside structured-extraction (see [extending.md](extending.md))
+Pass when **all** of the following hold:
+
+1. Agent reports success
+2. Extracted PO matches the golden fixture
+3. Portal **server state** matches `expected_state` (harness reads `GET /api/eval/orders/{po}`)
+
+Used by `v19_po_1042_acknowledge`. Extracting lines without clicking Acknowledge fails — the portal stays `Open` / `acknowledged: false`.
+
+## Planned additions (same domain)
+
+- More write-backs (quantity change, ASN submit) with server-state asserts
+- Virtualized order grids; stale cache; multi-buyer PO ambiguity
+- Captcha-style timing gate (wait N seconds)

@@ -129,6 +129,71 @@
       "portal": "v13",
       "outcome": "confirm_empty",
       "tags": ["empty-state", "graceful-noop", "smoke"]
+    },
+    {
+      "id": "v14_po_1042_lazy_accordion",
+      "portal": "v14",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "max_steps": 18,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. Open PO-1042, expand the line-items section (lines are not in the DOM until expanded), and finish when all lines are visible.",
+      "tags": ["lazy-accordion", "hidden-dom", "interaction", "hard"]
+    },
+    {
+      "id": "v15_po_1042_unlabeled",
+      "portal": "v15",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "max_steps": 16,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. Open PO-1042. Fields are unlabeled and have no data-testid attributes — infer buyer, order date, and line items from context, then finish.",
+      "tags": ["unlabeled-fields", "perception", "hard"]
+    },
+    {
+      "id": "v16_po_1042_nested_menu",
+      "portal": "v16",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "max_steps": 22,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. Open PO-1042. Line items are not on the page — open Actions → More → Export CSV, parse the download, and finish when extraction is complete.",
+      "tags": ["nested-menu", "csv-export", "download", "hard"]
+    },
+    {
+      "id": "v17_po_1042_decoys",
+      "portal": "v17",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "max_steps": 16,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. Several near-duplicate PO numbers exist (drafts, revisions, cancelled copies). Open the exact Open order PO-1042 — not PO-1042-DRAFT, PO-1042A, or PO-1042-REV2 — and finish when line items are visible.",
+      "tags": ["decoy-rows", "disambiguation", "hard"]
+    },
+    {
+      "id": "v18_po_1042_interstitial",
+      "portal": "v18",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "max_steps": 18,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. After login, complete the human verification interstitial, then open PO-1042 and finish when line items are visible.",
+      "tags": ["antibot", "interstitial", "hard"]
+    },
+    {
+      "id": "v19_po_1042_acknowledge",
+      "portal": "v19",
+      "po_number": "PO-1042",
+      "outcome": "acknowledge_po",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "expected_state": "tests/fixtures/expected_state_po_1042_acked.json",
+      "max_steps": 18,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. Open PO-1042, click Acknowledge PO so the portal records the acknowledgement, then extract line items and finish.",
+      "tags": ["acknowledge", "write-back", "state-mutation", "hard"]
+    },
+    {
+      "id": "v20_po_1042_mfa",
+      "portal": "v20",
+      "po_number": "PO-1042",
+      "expected_fixture": "tests/fixtures/expected_po_1042.json",
+      "max_steps": 20,
+      "goal": "Log into the buyer portal using email vendor@fixturebench.test and password fixturebench123. After password login, enter the MFA verification code 424242, then open PO-1042 and finish when line items are visible.",
+      "tags": ["mfa", "otp", "auth", "hard"]
     }
   ]
 }

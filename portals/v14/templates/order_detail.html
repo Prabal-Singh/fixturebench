@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}{{ order.po_number }} — {{ portal_title }}{% endblock %}
+{% block body %}
+<header class="topbar">
+  <div class="brand">{{ portal_title }}</div>
+  <div class="user" data-testid="logged-in-user">{{ user_email }}</div>
+</header>
+<div class="layout">
+  <nav class="sidebar">
+    <a href="/orders" class="active" data-testid="nav-orders">Orders</a>
+  </nav>
+  <main class="content">
+    <div class="breadcrumb">
+      <a href="/orders">Orders</a> / <span data-testid="po-number">{{ order.po_number }}</span>
+    </div>
+    <h1 data-testid="po-title">{{ order.po_number }}</h1>
+    <dl class="meta-grid card">
+      <div>
+        <dt>Buyer</dt>
+        <dd data-testid="po-buyer">{{ buyer_name }}</dd>
+      </div>
+      <div>
+        <dt>Order Date</dt>
+        <dd data-testid="po-order-date">{{ order.order_date }}</dd>
+      </div>
+      <div>
+        <dt>Status</dt>
+        <dd data-testid="po-status">{{ order.status }}</dd>
+      </div>
+    </dl>
+
+    <div class="card">
+      <h2>Order Lines</h2>
+      <p class="muted" data-testid="accordion-hint">
+        Line items are not in the page until you expand this section.
+      </p>
+      <details class="accordion" data-testid="line-items-accordion" id="lazy-accordion">
+        <summary data-testid="expand-line-items">
+          <span class="accordion-label">Show line items ({{ order.line_count }})</span>
+        </summary>
+        <div id="lines-mount" data-testid="lines-mount">
+          <p class="muted" data-testid="lines-loading">Loading…</p>
+        </div>
+      </details>
+    </div>
+  </main>
+</div>
+<script>
+(function () {
+  const accordion = document.getElementById("lazy-accordion");
+  const mount = document.getElementById("lines-mount");
+  const po = {{ order.po_number | tojson }};
+  let loaded = false;
+
+  accordion.addEventListener("toggle", async function () {
+    if (!accordion.open || loaded) return;
+    try {
+      const res = await fetch("/api/orders/" + encodeURIComponent(po) + "/lines");
+      if (!res.ok) throw new Error("fetch failed");
+      const payload = await res.json();
+      const lines = payload.lines || [];
+      let rows = "";
+      for (const line of lines) {
+        const qty = Number.isInteger(line.quantity) ? line.quantity : line.quantity;
+        rows += "<tr data-testid=\"po-line-" + line.line_number + "\">"
+          + "<td data-testid=\"line-item-code\">" + line.buyer_item_code + "</td>"
+          + "<td data-testid=\"line-description\">" + line.description + "</td>"
+          + "<td data-testid=\"line-quantity\">" + qty + "</td>"
+          + "<td data-testid=\"line-uom\">" + line.uom + "</td>"
+          + "</tr>";
+      }
+      mount.innerHTML =
+        "<table class=\"data-table\" data-testid=\"po-lines-table\">"
+        + "<thead><tr><th>Item</th><th>Description</th><th>Qty</th><th>UOM</th></tr></thead>"
+        + "<tbody>" + rows + "</tbody></table>";
+      loaded = true;
+    } catch (err) {
+      mount.innerHTML = "<p class=\"error\" data-testid=\"lines-error\">Failed to load line items.</p>";
+    }
+  });
+})();
+</script>
+{% endblock %}

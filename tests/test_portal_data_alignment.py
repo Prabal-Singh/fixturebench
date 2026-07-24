@@ -52,3 +52,32 @@ def test_v3_page1_does_not_contain_target_po_1042() -> None:
     page_size = portal["page_size"]
     page1 = [o["po_number"] for o in portal["orders"][:page_size]]
     assert "PO-1042" not in page1
+
+
+def test_v17_decoy_rows_precede_real_po() -> None:
+    portal = _load_json(ROOT / "portals/v17/data/orders.json")
+    ids = [o["po_number"] for o in portal["orders"]]
+    assert ids.index("PO-1042-DRAFT") < ids.index("PO-1042")
+    assert ids.index("PO-1042A") < ids.index("PO-1042")
+    real = next(o for o in portal["orders"] if o["po_number"] == "PO-1042")
+    assert real["status"] == "Open"
+    assert not real.get("is_decoy")
+    decoys = [o for o in portal["orders"] if o.get("is_decoy")]
+    assert len(decoys) >= 3
+
+
+def test_hard_cases_are_tagged() -> None:
+    suite = _load_json(ROOT / "eval/cases.json")
+    hard_ids = {
+        "v14_po_1042_lazy_accordion",
+        "v15_po_1042_unlabeled",
+        "v16_po_1042_nested_menu",
+        "v17_po_1042_decoys",
+        "v18_po_1042_interstitial",
+        "v19_po_1042_acknowledge",
+        "v20_po_1042_mfa",
+    }
+    by_id = {case["id"]: case for case in suite["cases"]}
+    for case_id in hard_ids:
+        assert case_id in by_id
+        assert "hard" in by_id[case_id]["tags"]

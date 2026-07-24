@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}{{ order.po_number }} — {{ portal_title }}{% endblock %}
+{% block body %}
+<header class="topbar">
+  <div class="brand">{{ portal_title }}</div>
+  <div class="user" data-testid="logged-in-user">{{ user_email }}</div>
+</header>
+<div class="layout">
+  <nav class="sidebar">
+    <a href="/orders" class="active" data-testid="nav-orders">Orders</a>
+  </nav>
+  <main class="content">
+    <div class="breadcrumb">
+      <a href="/orders">Orders</a> / <span data-testid="po-number">{{ order.po_number }}</span>
+    </div>
+    <h1 data-testid="po-title">{{ order.po_number }}</h1>
+    <dl class="meta-grid card">
+      <div>
+        <dt>Buyer</dt>
+        <dd data-testid="po-buyer">{{ buyer_name }}</dd>
+      </div>
+      <div>
+        <dt>Order Date</dt>
+        <dd data-testid="po-order-date">{{ order.order_date }}</dd>
+      </div>
+      <div>
+        <dt>Status</dt>
+        <dd data-testid="po-status">{{ order.status }}</dd>
+      </div>
+    </dl>
+
+    <div class="card">
+      <h2>Order Lines</h2>
+      {% if not acknowledged %}
+      <p class="muted" data-testid="ack-notice">
+        Line items are locked until you acknowledge this purchase order.
+      </p>
+      <form method="post" action="/orders/{{ order.po_number }}/acknowledge" data-testid="ack-form">
+        <button type="submit" class="btn" data-testid="acknowledge-button">Acknowledge PO</button>
+      </form>
+      {% else %}
+      <p class="muted" data-testid="ack-confirmed">Acknowledged. Line items unlocked.</p>
+      <table class="data-table" data-testid="po-lines-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Description</th>
+            <th>Qty</th>
+            <th>UOM</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for line in order.lines %}
+          <tr data-testid="po-line-{{ line.line_number }}">
+            <td data-testid="line-item-code">{{ line.buyer_item_code }}</td>
+            <td data-testid="line-description">{{ line.description }}</td>
+            <td data-testid="line-quantity">{{ line.quantity | int if line.quantity == line.quantity | int else line.quantity }}</td>
+            <td data-testid="line-uom">{{ line.uom }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+    </div>
+  </main>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Verify — {{ portal_title }}{% endblock %}
+{% block body %}
+<div class="login-page">
+  <div class="login-card">
+    <h1>Two-factor authentication</h1>
+    <p class="subtitle">Enter the 6-digit code sent to {{ user_email }}</p>
+    {% if error %}
+    <div class="error" data-testid="mfa-error">{{ error }}</div>
+    {% endif %}
+    <form method="post" action="/mfa" data-testid="mfa-form">
+      <div class="form-group">
+        <label for="code">Verification code</label>
+        <input
+          id="code"
+          name="code"
+          type="text"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+          maxlength="6"
+          pattern="[0-9]{6}"
+          required
+          data-testid="mfa-code"
+        >
+      </div>
+      <button type="submit" class="btn" data-testid="mfa-submit">Verify</button>
+    </form>
+    <p class="muted" data-testid="mfa-hint">For this eval environment the code is always 424242.</p>
+  </div>
+</div>
+{% endblock %}

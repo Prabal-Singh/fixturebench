@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[envs,dev]"
+      - name: Unit tests
+        run: pytest -q tests/test_eval.py tests/test_portal_registry.py tests/test_portal_data_alignment.py tests/test_plug_and_play.py
+
+  smoke-eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[envs,dev,playwright]"
+          playwright install chromium --with-deps
+      - name: Write-back + unit portal tests
+        run: pytest -q tests/test_writeback.py
+      - name: Smoke eval
+        run: |
+          PYTHONPATH=. fixturebench run \
+            --agent examples.playwright_smoke_agent:PlaywrightSmokeAgent \
+            --tag smoke

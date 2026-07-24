@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Security check — {{ portal_title }}{% endblock %}
+{% block body %}
+<div class="login-page">
+  <div class="login-card">
+    <h1>Verify you are human</h1>
+    <p class="subtitle">Before continuing to {{ portal_title }}, complete this check.</p>
+    <p class="muted" data-testid="verify-user">Signed in as {{ user_email }}</p>
+    <form method="post" action="/verify" data-testid="verify-form">
+      <label class="checkbox-row" data-testid="verify-checkbox-label">
+        <input type="checkbox" name="human" value="1" required data-testid="verify-checkbox">
+        <span>I am not a robot</span>
+      </label>
+      <button type="submit" class="btn" data-testid="verify-submit">Continue</button>
+    </form>
+  </div>
+</div>
+<style>
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1.25rem 0;
+  font-size: 0.95rem;
+}
+</style>
+{% endblock %}
