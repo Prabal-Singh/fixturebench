@@ -9,8 +9,8 @@ jobs:
   unit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
       - name: Install
@@ -23,8 +23,8 @@ jobs:
   smoke-eval:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
       - name: Install
@@ -32,8 +32,20 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e ".[envs,dev,playwright]"
           playwright install chromium --with-deps
-      - name: Write-back + unit portal tests
-        run: pytest -q tests/test_writeback.py
+      - name: Portal startup sanity
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from fixturebench.eval.portal import ManagedPortal
+          root = Path(".").resolve()
+          with ManagedPortal("v19", root) as url:
+              import urllib.request
+              with urllib.request.urlopen(f"{url}/login", timeout=5) as r:
+                  assert r.status == 200, r.status
+              print("v19 ok", url)
+          PY
+      - name: Write-back + virtualized portal tests
+        run: pytest -q tests/test_writeback.py tests/test_virtualized_grid.py
       - name: Smoke eval
         run: |
           PYTHONPATH=. fixturebench run \

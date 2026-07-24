@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}Purchase Orders — {{ portal_title }}{% endblock %}
+{% block body %}
+<header class="topbar">
+  <div class="brand">{{ portal_title }}</div>
+  <div class="user" data-testid="logged-in-user">{{ user_email }}</div>
+</header>
+<div class="layout">
+  <nav class="sidebar">
+    <a href="/orders" class="active" data-testid="nav-orders">Orders</a>
+  </nav>
+  <main class="content">
+    <h1>Purchase Orders</h1>
+    <p class="muted" data-testid="virtual-hint">
+      {{ total_orders }} orders in a virtualized grid. Only ~{{ viewport_rows }} rows are mounted at a time — scroll to load more. There is no search box.
+    </p>
+    <div class="card">
+      <div class="grid-header">
+        <div>PO Number</div>
+        <div>Order Date</div>
+        <div>Status</div>
+        <div>Items</div>
+        <div>Total</div>
+      </div>
+      <div
+        id="virtual-viewport"
+        class="virtual-viewport"
+        data-testid="virtual-viewport"
+        data-row-height="{{ row_height }}"
+        data-viewport-rows="{{ viewport_rows }}"
+        data-total="{{ total_orders }}"
+      >
+        <div id="virtual-spacer" class="virtual-spacer" data-testid="virtual-spacer"></div>
+        <div id="virtual-window" class="virtual-window" data-testid="virtual-window"></div>
+      </div>
+    </div>
+  </main>
+</div>
+<style>
+.grid-header, .virtual-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 0.7fr 0.8fr;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0 0.75rem;
+}
+.grid-header {
+  font-size: 0.8rem;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  height: 36px;
+}
+.virtual-viewport {
+  position: relative;
+  height: calc({{ viewport_rows }} * {{ row_height }}px);
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  background: #fff;
+}
+.virtual-spacer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  pointer-events: none;
+}
+.virtual-window {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+.virtual-row {
+  height: {{ row_height }}px;
+  border-bottom: 1px solid #eef2f0;
+  box-sizing: border-box;
+}
+.virtual-row a { font-weight: 600; }
+</style>
+<script>
+(function () {
+  const viewport = document.getElementById("virtual-viewport");
+  const spacer = document.getElementById("virtual-spacer");
+  const windowEl = document.getElementById("virtual-window");
+  const rowHeight = Number(viewport.dataset.rowHeight);
+  const total = Number(viewport.dataset.total);
+  const overscan = 2;
+  let loading = false;
+  let currentOffset = -1;
+
+  spacer.style.height = (total * rowHeight) + "px";
+
+  function formatMoney(n) {
+    return "$" + Number(n).toFixed(2);
+  }
+
+  function render(rows, offset) {
+    windowEl.style.transform = "translateY(" + (offset * rowHeight) + "px)";
+    windowEl.innerHTML = rows.map(function (row) {
+      return (
+        '<div class="virtual-row" data-testid="virtual-row-' + row.po_number + '">'
+        + '<div><a href="/orders/' + encodeURIComponent(row.po_number) + '" data-testid="po-link-' + row.po_number + '">' + row.po_number + '</a></div>'
+        + '<div>' + row.order_date + '</div>'
+        + '<div><span class="status status-' + String(row.status).toLowerCase() + '" data-testid="po-status-' + row.po_number + '">' + row.status + '</span></div>'
+        + '<div>' + row.item_count + '</div>'
+        + '<div>' + formatMoney(row.total_amount) + '</div>'
+        + '</div>'
+      );
+    }).join("");
+  }
+
+  async function loadWindow() {
+    if (loading) return;
+    const scrollTop = viewport.scrollTop;
+    const visible = Math.ceil(viewport.clientHeight / rowHeight) + overscan * 2;
+    const start = Math.max(0, Math.floor(scrollTop / rowHeight) - overscan);
+    if (start === currentOffset && windowEl.childElementCount) return;
+    loading = true;
+    try {
+      const res = await fetch("/api/orders/window?offset=" + start + "&limit=" + visible);
+      if (!res.ok) throw new Error("window fetch failed");
+      const payload = await res.json();
+      currentOffset = payload.offset;
+      render(payload.rows, payload.offset);
+    } catch (err) {
+      windowEl.innerHTML = '<p class="error" data-testid="virtual-error">Failed to load orders.</p>';
+    } finally {
+      loading = false;
+    }
+  }
+
+  viewport.addEventListener("scroll", function () { loadWindow(); });
+  loadWindow();
+})();
+</script>
+{% endblock %}

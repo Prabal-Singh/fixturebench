@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import os
 import socket
 import subprocess
 import sys
+import tempfile
 import time
 import urllib.error
 import urllib.request
@@ -113,6 +115,11 @@ PORTAL_SPECS: dict[PortalVersion, dict[str, object]] = {
         "default_port": 8019,
         "challenge": "mfa-handoff",
     },
+    "v21": {
+        "server": "portals/v21/server.py",
+        "default_port": 8020,
+        "challenge": "virtualized-grid",
+    },
 }
 
 PORTAL_CHALLENGES: dict[PortalVersion, str] = {
@@ -126,16 +133,40 @@ def free_port() -> int:
         return sock.getsockname()[1]
 
 
-def wait_for_server(url: str, timeout: float = 10.0) -> None:
+def wait_for_server(
+    url: str,
+    timeout: float = 30.0,
+    *,
+    proc: Optional[subprocess.Popen] = None,
+    stderr_path: Optional[Path] = None,
+) -> None:
     deadline = time.time() + timeout
     while time.time() < deadline:
+        if proc is not None and proc.poll() is not None:
+            detail = _read_stderr(stderr_path)
+            raise RuntimeError(
+                f"Portal process exited with code {proc.returncode} before becoming ready at {url}."
+                f"{detail}"
+            )
         try:
             with urllib.request.urlopen(url, timeout=1) as response:
                 if response.status < 500:
                     return
-        except (urllib.error.URLError, TimeoutError):
+        except (urllib.error.URLError, TimeoutError, ConnectionError, OSError):
             time.sleep(0.1)
-    raise RuntimeError(f"Portal server did not start at {url}")
+    detail = _read_stderr(stderr_path)
+    raise RuntimeError(f"Portal server did not start at {url}.{detail}")
+
+
+def _read_stderr(stderr_path: Optional[Path]) -> str:
+    if stderr_path is None or not stderr_path.is_file():
+        return ""
+    text = stderr_path.read_text(encoding="utf-8", errors="replace").strip()
+    if not text:
+        return ""
+    # Keep failure messages readable in CI logs.
+    clipped = text[-2000:]
+    return f"\n--- portal stderr ---\n{clipped}\n--- end stderr ---"
 
 
 @dataclass
@@ -148,6 +179,7 @@ class ManagedPortal:
 
     _proc: Optional[subprocess.Popen] = None
     _url: Optional[str] = None
+    _stderr_path: Optional[Path] = None
 
     @property
     def url(self) -> str:
@@ -163,24 +195,63 @@ class ManagedPortal:
         port = self.port or free_port()
         base = f"http://127.0.0.1:{port}"
         server_path = self.root / str(spec["server"])
+        if not server_path.is_file():
+            raise FileNotFoundError(f"Portal server not found: {server_path}")
+
+        stderr_file = tempfile.NamedTemporaryFile(
+            prefix=f"fixturebench-{self.version}-",
+            suffix=".stderr",
+            delete=False,
+        )
+        self._stderr_path = Path(stderr_file.name)
+
+        env = os.environ.copy()
+        env["PYTHONUNBUFFERED"] = "1"
 
         self._proc = subprocess.Popen(
-            [sys.executable, str(server_path), "--port", str(port)],
+            [
+                sys.executable,
+                str(server_path),
+                "--host",
+                "127.0.0.1",
+                "--port",
+                str(port),
+            ],
             stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+            stderr=stderr_file,
             cwd=str(self.root),
+            env=env,
         )
-        wait_for_server(f"{base}/login")
+        stderr_file.close()
+        try:
+            wait_for_server(
+                f"{base}/login",
+                timeout=30.0,
+                proc=self._proc,
+                stderr_path=self._stderr_path,
+            )
+        except Exception:
+            self.stop()
+            raise
         self._url = base
         return self.url
 
     def stop(self) -> None:
-        if self._proc is None:
-            return
-        self._proc.terminate()
-        self._proc.wait(timeout=5)
-        self._proc = None
+        if self._proc is not None:
+            self._proc.terminate()
+            try:
+                self._proc.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                self._proc.kill()
+                self._proc.wait(timeout=5)
+            self._proc = None
         self._url = None
+        if self._stderr_path is not None:
+            try:
+                self._stderr_path.unlink(missing_ok=True)
+            except OSError:
+                pass
+            self._stderr_path = None
 
     def __enter__(self) -> str:
         return self.start()

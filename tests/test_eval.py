@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def test_load_eval_suite() -> None:
     suite = load_suite(ROOT / "eval" / "cases.json")
     assert suite.version == 2
-    assert len(suite.cases) >= 22
+    assert len(suite.cases) >= 23
     assert {case.id for case in suite.cases} >= {
         "v1_po_1042",
         "v2_po_1042",
@@ -22,6 +22,7 @@ def test_load_eval_suite() -> None:
         "v13_empty_orders",
         "v14_po_1042_lazy_accordion",
         "v20_po_1042_mfa",
+        "v21_po_1042_virtualized",
     }
 
 

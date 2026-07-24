@@ -1,6 +1,6 @@
 # Portal catalog — buyer / supplier workflows
 
-**20 deterministic fake buyer portals** and **22 eval cases** covering failure modes procurement browser agents hit (login → find PO → extract / act).
+**21 deterministic fake buyer portals** and **23 eval cases** covering failure modes procurement browser agents hit (login → find PO → extract / act).
 
 This is a **procurement-portal stress suite**, not a general web-agent benchmark.
 
@@ -28,6 +28,7 @@ This is a **procurement-portal stress suite**, not a general web-agent benchmark
 | **v18** | 8017 | Anti-bot interstitial | Human check gate after login |
 | **v19** | 8018 | Acknowledge write-back | Must mutate portal state; harness asserts `/api/eval/...` |
 | **v20** | 8019 | MFA handoff | OTP step after password (`424242`) |
+| **v21** | 8020 | Virtualized grid | Only ~8 rows mounted; must scroll (no search) |
 
 ## Case registry
 
@@ -55,6 +56,7 @@ This is a **procurement-portal stress suite**, not a general web-agent benchmark
 | `v18_po_1042_interstitial` | v18 | extract | **hard**, antibot |
 | `v19_po_1042_acknowledge` | v19 | **acknowledge_po** | **hard**, write-back |
 | `v20_po_1042_mfa` | v20 | extract | **hard**, mfa |
+| `v21_po_1042_virtualized` | v21 | extract | **hard**, virtualized |
 
 ## Credentials (this pack)
 
@@ -70,7 +72,7 @@ This is a **procurement-portal stress suite**, not a general web-agent benchmark
 |------|-------|--------|
 | Smoke | `smoke` tag | Fast CI sanity |
 | Core | v1–v13 | Common UI patterns |
-| Hard | `hard` tag (v14–v20) | Realistic traps from agent failures |
+| Hard | `hard` tag (v14–v21) | Realistic traps from agent failures |
 
 Run hard cases only:
 
@@ -101,5 +103,5 @@ Used by `v19_po_1042_acknowledge`. Extracting lines without clicking Acknowledge
 ## Planned additions (same domain)
 
 - More write-backs (quantity change, ASN submit) with server-state asserts
-- Virtualized order grids; stale cache; multi-buyer PO ambiguity
+- Stale cache; multi-buyer PO ambiguity
 - Captcha-style timing gate (wait N seconds)

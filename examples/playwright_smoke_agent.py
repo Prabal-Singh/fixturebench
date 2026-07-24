@@ -140,6 +140,15 @@ class PlaywrightSmokeAgent:
                 page.click('[data-testid="search-submit"]')
                 page.wait_for_load_state("domcontentloaded")
 
+        # v21 virtualized grid — scroll until the target row mounts
+        viewport = page.locator('[data-testid="virtual-viewport"]')
+        if viewport.count():
+            for _ in range(30):
+                if page.locator(f'[data-testid="po-link-{target_id}"]').count():
+                    return
+                viewport.evaluate("el => { el.scrollTop = el.scrollTop + el.clientHeight; }")
+                page.wait_for_timeout(60)
+
         # v3 pagination — click next until found or exhausted
         for _ in range(5):
             if page.locator(f'[data-testid="po-link-{target_id}"], a:has-text("{target_id}")').count():

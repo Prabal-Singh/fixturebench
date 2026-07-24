@@ -76,6 +76,7 @@ def test_hard_cases_are_tagged() -> None:
         "v18_po_1042_interstitial",
         "v19_po_1042_acknowledge",
         "v20_po_1042_mfa",
+        "v21_po_1042_virtualized",
     }
     by_id = {case["id"]: case for case in suite["cases"]}
     for case_id in hard_ids:

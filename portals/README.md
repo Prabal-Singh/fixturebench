@@ -28,6 +28,7 @@ See the full **[catalog](../docs/catalog.md)** and **[how to add a portal](../do
 | v18 | Anti-bot interstitial | 8017 |
 | v19 | Acknowledge to reveal | 8018 |
 | v20 | MFA / OTP handoff | 8019 |
+| v21 | Virtualized order grid | 8020 |
 
 ## Credentials (all envs in this pack)
 
