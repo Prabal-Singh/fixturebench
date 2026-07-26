@@ -6,7 +6,7 @@ Baseline FixtureBench results. Re-run locally and update this table when scores 
 |-------|------|-------|------|-------|
 | `playwright-smoke` | `smoke` | **4/4** | 2026-07-24 | FixtureBench CI / demo agent |
 | `scruffy-deterministic` | `smoke` | **4/4** | 2026-07-24 | [Scruffy](https://github.com/Prabal-Singh/Scruffy) CI dogfood |
-| `scruffy-agentic` (`qwen2.5:14b`) | `hard` | **4/10** | 2026-07-26 | Ollama @ `192.168.0.10:11434` |
+| `scruffy-agentic` (`qwen2.5:14b`) | `hard` | **4/10** | 2026-07-26 | local Ollama (`qwen2.5:14b`) |
 
 ## Hard-band breakdown (`scruffy-agentic`, 2026-07-26)
 
@@ -50,10 +50,10 @@ PYTHONPATH=src:. fixturebench run \
   --tag smoke
 ```
 
-Agentic hard band (needs Ollama):
+Agentic hard band (needs a reachable Ollama host):
 
 ```bash
-export SCRUFFY_OLLAMA_URL=http://192.168.0.10:11434
+export SCRUFFY_OLLAMA_URL=http://127.0.0.1:11434   # or your Ollama host
 export SCRUFFY_OLLAMA_MODEL=qwen2.5:14b
 PYTHONPATH=src:. fixturebench run \
   --agent scruffy.fixturebench_agent:ScruffyAgenticAdapter \

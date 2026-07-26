@@ -12,12 +12,20 @@ Built for teams automating **procurement workflows** (login → find PO → extr
 
 ### Install
 
+Not on PyPI yet — install from GitHub:
+
 ```bash
 git clone https://github.com/Prabal-Singh/fixturebench.git
 cd fixturebench
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[envs,dev]"
 pip install playwright && playwright install chromium
+```
+
+Or as a dependency:
+
+```bash
+pip install "fixturebench[envs,playwright] @ git+https://github.com/Prabal-Singh/fixturebench.git"
 ```
 
 ### Run the smoke suite (60 seconds)

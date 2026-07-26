@@ -4,7 +4,7 @@ Pattern: observe → LLM chooses action → Playwright executes → repeat.
 
 Works with OpenAI or Ollama (OpenAI-compatible):
 
-    export OPENAI_BASE_URL=http://192.168.0.9:11434/v1
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1   # or your Ollama host
     export OPENAI_API_KEY=ollama
     export OPENAI_MODEL=qwen2.5:14b
 

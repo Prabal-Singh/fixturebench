@@ -1,4 +1,4 @@
-"""FixtureBench CLI — plug in any browser agent and run evals.
+"""FixtureBench CLI — run procurement portal evals against any browser agent.
 
 Examples:
     fixturebench list
@@ -65,7 +65,7 @@ def _print_summary(report) -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="fixturebench",
-        description="Plug-and-play eval harness for browser agents",
+        description="Deterministic eval for procurement browser agents",
     )
     parser.add_argument(
         "--root",
