@@ -273,6 +273,7 @@ fixturebench/
 |-------|------|-------|
 | `playwright-smoke` | smoke | **4/4** |
 | `scruffy-deterministic` | smoke | **4/4** |
+| `scruffy-agentic` (`qwen2.5:14b`) | hard | **4/10** |
 
 Details + reproduce steps: [docs/scores.md](docs/scores.md).
 
@@ -283,8 +284,9 @@ Roadmap (stays in procurement):
 - [x] Stale cache / multi-buyer PO ambiguity
 - [x] GitHub Action for CI eval
 - [x] Scruffy CI dogfood + published scores
+- [x] Publish agentic hard-band scores (Ollama)
 - [ ] More write-backs (qty change / ASN)
-- [ ] Publish stable agentic hard-band scores (Ollama)
+- [ ] Harden Scruffy agent on failing hard cases (lazy accordion, MFA, virtualized, multi-buyer)
 
 ---
 
