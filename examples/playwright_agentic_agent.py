@@ -23,6 +23,8 @@ import urllib.error
 import urllib.request
 from typing import Any, Optional
 
+_RATE_LIMIT_RETRY_RE = re.compile(r'"retryDelay":\s*"(\d+(?:\.\d+)?)s"')
+
 from playwright.sync_api import sync_playwright
 
 from fixturebench.adapters.protocol import AgentRunResult, EvalTask
@@ -69,8 +71,13 @@ def _parse_json_content(content: str) -> dict[str, Any]:
     return json.loads(content)
 
 
-def complete_json(*, system: str, user: dict[str, Any]) -> dict[str, Any]:
-    """Call an OpenAI-compatible chat completions API and parse JSON."""
+def complete_json(*, system: str, user: dict[str, Any], max_retries: int = 5) -> dict[str, Any]:
+    """Call an OpenAI-compatible chat completions API and parse JSON.
+
+    Retries on HTTP 429 (rate limit) with backoff — needed for free-tier APIs
+    (e.g. Gemini's free tier caps at ~5 requests/minute), which otherwise turn
+    into misleading eval failures that never actually attempted the task.
+    """
     api_key = os.environ.get("OPENAI_API_KEY")
     if not api_key:
         raise RuntimeError(
@@ -92,24 +99,47 @@ def complete_json(*, system: str, user: dict[str, Any]) -> dict[str, Any]:
     if "11434" not in base:
         body["response_format"] = {"type": "json_object"}
 
-    request = urllib.request.Request(
-        f"{base}/chat/completions",
-        data=json.dumps(body).encode("utf-8"),
-        headers={
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-        },
-        method="POST",
-    )
-    try:
-        with urllib.request.urlopen(request, timeout=120) as response:
-            payload = json.loads(response.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        detail = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"LLM HTTP {exc.code}: {detail}") from exc
+    request_body = json.dumps(body).encode("utf-8")
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        # Some providers (e.g. Groq) sit behind Cloudflare, which blocks the
+        # default urllib UA ("Python-urllib/3.x") as bot traffic (HTTP 403 /
+        # Cloudflare error 1010). A normal browser-like UA avoids that.
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+        ),
+    }
 
-    content = payload["choices"][0]["message"]["content"]
-    return _parse_json_content(content)
+    last_error: Optional[Exception] = None
+    for attempt in range(max_retries + 1):
+        request = urllib.request.Request(
+            f"{base}/chat/completions",
+            data=request_body,
+            headers=headers,
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=120) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+            content = payload["choices"][0]["message"]["content"]
+            return _parse_json_content(content)
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode("utf-8", errors="replace")
+            if exc.code == 429 and attempt < max_retries:
+                match = _RATE_LIMIT_RETRY_RE.search(detail)
+                delay = float(match.group(1)) + 1.0 if match else min(2.0 ** attempt, 30.0)
+                print(f"[complete_json] 429 rate limited, retrying in {delay:.1f}s "
+                      f"(attempt {attempt + 1}/{max_retries})", flush=True)
+                time.sleep(delay)
+                last_error = RuntimeError(f"LLM HTTP {exc.code}: {detail}")
+                continue
+            raise RuntimeError(f"LLM HTTP {exc.code}: {detail}") from exc
+
+    assert last_error is not None
+    raise last_error
 
 
 class PlaywrightAgenticAgent:

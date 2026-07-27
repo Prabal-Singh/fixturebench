@@ -282,8 +282,11 @@ fixturebench/
 | `playwright-smoke` | smoke | **4/4** |
 | `scruffy-deterministic` | smoke | **4/4** |
 | `scruffy-agentic` (`qwen2.5:14b`) | hard | **4/10** |
+| `playwright-agentic` (`llama-3.3-70b-versatile`) | hard | **7/9 attempted** |
 
-Details + reproduce steps: [docs/scores.md](docs/scores.md).
+**Notable finding:** the 14B and 70B agents failed two of the same hard cases in the *same way* — one endlessly re-clicked a decoy PO, one endlessly scrolled a virtualized grid with no way to know when to stop. Different model sizes, identical failure shape. Evidence this is a sequencing/feedback-loop gap, not a raw capability gap — a bigger model alone doesn't fix it.
+
+Full per-case breakdown + reproduce steps: [docs/scores.md](docs/scores.md).
 
 Roadmap (stays in procurement):
 
